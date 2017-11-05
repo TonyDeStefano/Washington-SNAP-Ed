@@ -48,6 +48,19 @@ class Controller {
 		wp_enqueue_style( 'wasnap-bootstrap-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/bootstrap.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 		wp_enqueue_style( 'wasnap-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/wasnap.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 	}
+
+	public function add_role()
+    {
+        add_role(
+            'provider',
+            __( 'Provider' ),
+            array(
+                'read' => TRUE,
+                'edit_posts' => FALSE,
+                'delete_posts' => FALSE
+            )
+        );
+    }
 	
 	public function form_capture()
 	{
@@ -112,12 +125,46 @@ class Controller {
 	{
 		add_menu_page( 'SNAP-Ed', 'SNAP-Ed', 'manage_options', 'wasnap', array( $this, 'print_settings_page' ), 'dashicons-carrot' );
 		add_submenu_page( 'wasnap', 'Settings', 'Settings', 'manage_options', 'wasnap' );
+        add_submenu_page( 'wasnap', 'Providers', 'Providers', 'manage_options', 'wasnap_providers', array( $this, 'print_providers_page' ) );
 	}
 	
 	public function register_settings()
 	{
-
+        register_setting( 'wasnap_settings', 'wasnap_regions' );
+        register_setting( 'wasnap_settings', 'wasnap_roles' );
 	}
+
+    /**
+     * @param bool $as_list
+     *
+     * @return array|string
+     */
+	public function getRegions( $as_list = FALSE )
+    {
+        $regions = explode( ',', get_option( 'wasnap_regions', '' ) );
+        foreach ( $regions as $index => $region )
+        {
+            $regions[ $index ] = trim( $region );
+        }
+
+        return ( $as_list ) ? implode( ', ', $regions ) : $regions;
+    }
+
+    /**
+     * @param bool $as_list
+     *
+     * @return array|string
+     */
+    public function getRoles( $as_list = FALSE )
+    {
+        $roles = explode( ',', get_option( 'wasnap_roles' , '' ) );
+        foreach ( $roles as $index => $role )
+        {
+            $roles[ $index ] = trim( $role );
+        }
+
+        return ( $as_list ) ? implode( ', ', $roles ) : $roles;
+    }
 	
 	public function admin_scripts()
 	{
@@ -139,9 +186,6 @@ class Controller {
 		return $links;
 	}
 
-	/**
-	 *
-	 */
 	public function settings_page()
 	{
 		add_options_page(
@@ -153,13 +197,15 @@ class Controller {
 		);
 	}
 
-	/**
-	 *
-	 */
 	public function print_settings_page()
 	{
 		include( dirname( dirname( __DIR__ ) ) . '/includes/settings.php' );
 	}
+
+    public function print_providers_page()
+    {
+        include( dirname( dirname( __DIR__ ) ) . '/includes/providers.php' );
+    }
 
 	public function create_nonce()
 	{
@@ -179,4 +225,89 @@ class Controller {
 
 		return FALSE;
 	}
+
+    public function extra_profile_fields()
+    {
+        include( dirname( dirname( __DIR__ ) ) . '/includes/user_fields.php' );
+    }
+
+    public function save_extra_profile_fields()
+    {
+        if ( ! current_user_can( 'edit_user', $_POST['user_id'] ) )
+        {
+            return FALSE;
+        }
+
+        if ( isset( $_POST['agency'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'agency', $_POST['agency'] );
+        }
+
+        if ( isset( $_POST['address'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'address', $_POST['address'] );
+        }
+
+        if ( isset( $_POST['address2'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'address2', $_POST['address2'] );
+        }
+
+        if ( isset( $_POST['city'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'city', $_POST['city'] );
+        }
+
+        if ( isset( $_POST['state'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'state', $_POST['state'] );
+        }
+
+        if ( isset( $_POST['zip'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'zip', $_POST['zip'] );
+        }
+
+        if ( isset( $_POST['phone'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'phone', $_POST['phone'] );
+        }
+
+        if ( isset( $_POST['url'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'url', $_POST['url'] );
+        }
+
+        if ( isset( $_POST['region'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'region', $_POST['region'] );
+        }
+
+        if ( isset( $_POST['snap_ed_role'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'snap_ed_role', $_POST['snap_ed_role'] );
+        }
+
+        if ( isset( $_POST['program_focus'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'program_focus', $_POST['program_focus'] );
+        }
+
+        if ( isset( $_POST['is_profile_private'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'is_profile_private', $_POST['is_profile_private'] );
+        }
+
+        if ( isset( $_POST['receives_notifications'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'receives_notifications', $_POST['receives_notifications'] );
+        }
+
+        if ( isset( $_POST['is_in_provider_directory'] ) )
+        {
+            update_user_meta( $_POST['user_id'], 'is_in_provider_directory', $_POST['is_in_provider_directory'] );
+        }
+
+        return TRUE;
+    }
 }

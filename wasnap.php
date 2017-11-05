@@ -26,33 +26,45 @@
  */
 
 require_once ( 'classes/WaSnap/Controller.php' );
+require_once ( 'classes/WaSnap/Util.php' );
+require_once ( 'classes/WaSnap/Provider.php' );
+require_once ( 'classes/WaSnap/ProviderTable.php' );
 
-$controller = new \WaSnap\Controller;
+$wasnap_controller = new \WaSnap\Controller;
 
 /* activate */
-register_activation_hook( __FILE__, array( $controller, 'activate' ) );
+register_activation_hook( __FILE__, array( $wasnap_controller, 'activate' ) );
 
 /* enqueue js and css */
-add_action( 'init', array( $controller, 'init' ) );
+add_action( 'init', array( $wasnap_controller, 'init' ) );
 
 /* capture form post */
-add_action ( 'init', array( $controller, 'form_capture' ) );
+add_action( 'init', array( $wasnap_controller, 'form_capture' ) );
 
 /* register shortcode */
-add_shortcode ( 'wasnap', array( $controller, 'short_code' ) );
+add_shortcode( 'wasnap', array( $wasnap_controller, 'short_code' ) );
+
+/* add role */
+add_action( 'init', array( $wasnap_controller, 'add_role' ) );
 
 /* admin stuff */
 if (is_admin() )
 {
 	/* Add main menu and sub-menus */
-	add_action( 'admin_menu', array( $controller, 'admin_menus') );
+	add_action( 'admin_menu', array( $wasnap_controller, 'admin_menus') );
 
 	/* register settings */
-	add_action( 'admin_init', array( $controller, 'register_settings' ) );
+	add_action( 'admin_init', array( $wasnap_controller, 'register_settings' ) );
 
 	/* admin scripts */
-	add_action( 'admin_init', array( $controller, 'admin_scripts' ) );
+	add_action( 'admin_init', array( $wasnap_controller, 'admin_scripts' ) );
 
 	/* add the settings page link */
-	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $controller, 'settings_link' ) );
+	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $wasnap_controller, 'settings_link' ) );
+
+    /* extra user fields */
+    add_action( 'show_user_profile', array( $wasnap_controller, 'extra_profile_fields' ) );
+    add_action( 'edit_user_profile', array( $wasnap_controller, 'extra_profile_fields' ) );
+    add_action( 'personal_options_update', array( $wasnap_controller, 'save_extra_profile_fields' ) );
+    add_action( 'edit_user_profile_update', array( $wasnap_controller, 'save_extra_profile_fields' ) );
 }
