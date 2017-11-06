@@ -24,6 +24,7 @@ class Provider {
     private $is_in_provider_directory = FALSE;
     private $is_profile_private = FALSE;
     private $approved_at;
+    private $is_provider = FALSE;
 
     /**
      * Provider constructor.
@@ -64,6 +65,15 @@ class Provider {
                     ->setIsInProviderDirectory( get_user_meta( $user->ID, 'is_in_provider_directory', TRUE ) )
                     ->setIsProfilePrivate( get_user_meta( $user->ID, 'is_profile_private', TRUE ) )
                     ->setApprovedAt( get_user_meta( $user->ID, 'approved_at', TRUE ) );
+
+                foreach ( $user->roles as $role )
+                {
+                    if ( $role == 'provider' )
+                    {
+                        $this->setIsProvider( TRUE );
+                        break;
+                    }
+                }
             }
             else
             {
@@ -497,6 +507,26 @@ class Provider {
     public function isApproved()
     {
         return ( strlen( $this->getApprovedAt() ) != 0 );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProvider()
+    {
+        return $this->is_provider;
+    }
+
+    /**
+     * @param bool $is_provider
+     *
+     * @return Provider
+     */
+    public function setIsProvider( $is_provider )
+    {
+        $this->is_provider = $is_provider;
+
+        return $this;
     }
 
     /**

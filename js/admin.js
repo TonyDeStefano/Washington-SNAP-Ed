@@ -10,6 +10,14 @@
             }
         });
 
+        $('#role').change(function(){
+            if( $('#role').val() === 'provider' ) {
+                $('#provider-information').show();
+            } else {
+                $('#provider-information').hide();
+            }
+        });
+
     });
 
 })(jQuery);

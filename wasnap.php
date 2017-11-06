@@ -62,9 +62,14 @@ if (is_admin() )
 	/* add the settings page link */
 	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $wasnap_controller, 'settings_link' ) );
 
+	/* redirect after ad user */
+    add_filter( 'wp_redirect', array( $wasnap_controller, 'redirect_after_add_user' ) );
+
     /* extra user fields */
+    add_action( 'user_new_form', array( $wasnap_controller, 'extra_profile_fields' ) );
     add_action( 'show_user_profile', array( $wasnap_controller, 'extra_profile_fields' ) );
     add_action( 'edit_user_profile', array( $wasnap_controller, 'extra_profile_fields' ) );
     add_action( 'personal_options_update', array( $wasnap_controller, 'save_extra_profile_fields' ) );
     add_action( 'edit_user_profile_update', array( $wasnap_controller, 'save_extra_profile_fields' ) );
+    add_action( 'user_register', array( $wasnap_controller, 'save_extra_profile_fields' ) );
 }

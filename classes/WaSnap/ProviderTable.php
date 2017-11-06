@@ -68,7 +68,7 @@ class ProviderTable extends \WP_List_Table {
             case 'view':
                 return '<a href="?page=' . $_REQUEST['page'] . '&action=view&id=' . $item->ID . '" class="button-primary">View</a>';
             case 'approved':
-                return ( $item->approved == 1 ) ? '<span class="label label-success">Yes</span>' : '<span class="label label-danger">Yes</span>';
+                return ( $item->approved == 1 ) ? '<span class="label label-success">Yes</span>' : '<span class="label label-danger">No</span>';
             default:
                 return $item->$column_name;
         }
@@ -190,8 +190,7 @@ class ProviderTable extends \WP_List_Table {
         {
             $sql .= "
 				ORDER BY
-					ln.last_name ASC,
-					fn.first_name ASC";
+					a.agency ASC";
         }
 
         $total_items = $wpdb->query( $sql );

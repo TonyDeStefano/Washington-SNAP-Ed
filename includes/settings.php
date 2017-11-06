@@ -51,6 +51,19 @@
                     <textarea style="width:100%;" id="wasnap_roles" name="wasnap_roles"><?php echo $this->getRoles( TRUE ); ?></textarea>
                 </td>
             </tr>
+            <tr valign="top">
+                <th scope="row">
+                    <label for="wasnap_emails">
+                        Notification Emails
+                    </label>
+                </th>
+                <td>
+                    <?php echo $this->getEmails( TRUE ); ?>
+                </td>
+                <td>
+                    <textarea style="width:100%;" id="wasnap_emails" name="wasnap_emails"><?php echo $this->getEmails( TRUE ); ?></textarea>
+                </td>
+            </tr>
             <tr>
                 <td></td>
                 <td></td>
@@ -58,17 +71,34 @@
             </tr>
 		</table>
 
-
-
 	</form>
 
-	<h1>Shortcode</h1>
+	<h1>Shortcodes</h1>
 	<p>
 		<strong>
-			Add this shortcode to your page:
+			Add these shortcodes to pages where you want this information available.
 		</strong>
 	</p>
 
-	[wasnap]
+    <p>Main Provider Login and Registration Page:</p>
+    <blockquote>
+
+        [wasnap]
+
+    </blockquote>
+
+    <p>Provider Directory:</p>
+    <blockquote>
+
+        [wasnap page="directory"]
+
+    </blockquote>
+
+    <p>Provider Forum:</p>
+    <blockquote>
+
+        [wasnap page="forum"]
+
+    </blockquote>
 
 </div>
