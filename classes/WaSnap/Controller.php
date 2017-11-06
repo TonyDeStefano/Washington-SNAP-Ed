@@ -146,6 +146,7 @@ class Controller {
                             update_user_meta( $this->getProvider()->getId(), 'program_focus', $_POST['program_focus'] );
                             update_user_meta( $this->getProvider()->getId(), 'is_profile_private', $_POST['is_profile_private'] );
                             update_user_meta( $this->getProvider()->getId(), 'is_in_provider_directory', $_POST['is_in_provider_directory'] );
+                            update_user_meta( $this->getProvider()->getId(), 'is_dshs', $_POST['is_dshs'] );
 
                             if ( isset( $_POST['receives_notifications'] ) )
                             {
@@ -477,7 +478,7 @@ class Controller {
     {
         global $pagenow;
 
-        if( is_admin() && 'user-new.php' == $pagenow )
+        if ( is_admin() && 'user-new.php' == $pagenow )
         {
             $user_details = get_user_by( 'email', $_REQUEST['email'] );
             $user_id = $user_details->ID;
@@ -565,6 +566,8 @@ class Controller {
         if ( isset( $_POST['is_approved'] ) && $_POST['is_approved'] == 1 )
         {
             update_user_meta( $user_id, 'approved_at', date( 'Y-m-d H:i:s' ) );
+            $provider = new Provider( $user_id );
+            $provider->sendApproval( $_REQUEST['password'] );
         }
 
         return TRUE;
@@ -680,5 +683,16 @@ class Controller {
         }
 
         return $pages;
+    }
+
+    /**
+     * @return Page
+     */
+    public function getFirstProviderPage()
+    {
+        foreach ( $this->getProviderLinksPages() as $page )
+        {
+            return $page;
+        }
     }
 }

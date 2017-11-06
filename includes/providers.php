@@ -51,9 +51,12 @@ if ( isset( $_GET[ 'action' ] ) )
                 $provider->approve();
             }
 
+            if ( ! $provider->hasApprovalBeenSent() && isset( $_GET['send'] ) && $_GET['send'] == 'true' )
+            {
+                $provider->sendApproval();
+            }
+
             ?>
-
-
 
             <p>
                 <a href="admin.php?page=wasnap_providers" class="btn btn-default">
@@ -65,6 +68,11 @@ if ( isset( $_GET[ 'action' ] ) )
                 <?php if ( ! $provider->isApproved() ) { ?>
                     <a id="approve-provider" href="#" class="btn btn-default" data-id="<?php echo $provider->getId(); ?>">
                         Approve Provider
+                    </a>
+                <?php } ?>
+                <?php if ( $provider->isApproved() && ! $provider->hasApprovalBeenSent() ) { ?>
+                    <a id="send-approval-email" href="#" class="btn btn-default" data-id="<?php echo $provider->getId(); ?>">
+                        Send Approval Email
                     </a>
                 <?php } ?>
             </p>
@@ -116,6 +124,14 @@ if ( isset( $_GET[ 'action' ] ) )
                                     <strong>Approved:</strong>
                                     <?php if ( $provider->isApproved() ) { ?>
                                         <span class="label label-success">Yes (on <?php echo $provider->getApprovedAt( 'n/j/Y' ); ?>)</span>
+                                    <?php } else { ?>
+                                        <span class="label label-danger">No</span>
+                                    <?php } ?>
+                                </li>
+                                <li>
+                                    <strong>Approval Sent:</strong>
+                                    <?php if ( $provider->hasApprovalBeenSent() ) { ?>
+                                        <span class="label label-success">Yes (on <?php echo $provider->getApprovalSentAt( 'n/j/Y' ); ?>)</span>
                                     <?php } else { ?>
                                         <span class="label label-danger">No</span>
                                     <?php } ?>

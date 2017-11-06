@@ -24,7 +24,9 @@ class Provider {
     private $is_in_provider_directory = FALSE;
     private $is_profile_private = FALSE;
     private $approved_at;
+    private $approval_sent_at;
     private $is_provider = FALSE;
+    private $is_dshs = FALSE;
 
     /**
      * Provider constructor.
@@ -77,7 +79,9 @@ class Provider {
                     ->setReceivesNotifications( get_user_meta( $user->ID, 'receives_notifications', TRUE ) )
                     ->setIsInProviderDirectory( get_user_meta( $user->ID, 'is_in_provider_directory', TRUE ) )
                     ->setIsProfilePrivate( get_user_meta( $user->ID, 'is_profile_private', TRUE ) )
-                    ->setApprovedAt( get_user_meta( $user->ID, 'approved_at', TRUE ) );
+                    ->setApprovedAt( get_user_meta( $user->ID, 'approved_at', TRUE ) )
+                    ->setApprovalSentAt( get_user_meta( $user->ID, 'approval_sent_at', TRUE ) )
+                    ->setIsDshs( get_user_meta( $user->ID, 'is_dshs', TRUE ) );
 
                 foreach ( $user->roles as $role )
                 {
@@ -523,6 +527,36 @@ class Provider {
     }
 
     /**
+     * @param string $format
+     *
+     * @return false|string
+     */
+    public function getApprovalSentAt( $format = 'Y-m-d H:i:s' )
+    {
+        return Util::getDate( $this->approval_sent_at, $format );
+    }
+
+    /**
+     * @param mixed $approval_sent_at
+     *
+     * @return Provider
+     */
+    public function setApprovalSentAt( $approval_sent_at )
+    {
+        $this->approval_sent_at = Util::setDate( $approval_sent_at );
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasApprovalBeenSent()
+    {
+        return ( strlen( $this->getApprovalSentAt() ) != 0 );
+    }
+
+    /**
      * @return bool
      */
     public function isProvider()
@@ -577,6 +611,35 @@ class Provider {
         update_user_meta( $this->id, 'approved_at', $this->getApprovedAt( 'Y-m-d H:i:s' ) );
     }
 
+    public function sendApproval( $password = NULL )
+    {
+        echo "ggg";
+
+        global $wasnap_controller;
+
+        $this->setApprovalSentAt( time() );
+        update_user_meta( $this->id, 'approval_sent_at', $this->getApprovalSentAt( 'Y-m-d H:i:s' ) );
+
+        $message = '
+            <p>Dear ' . $this->getFullName() . ',</p>
+            <p><strong>' . $this->getAgency() . '</strong> has just been approved as a provider on the Washington State SNAP Education website!</p>
+            <p><a href="' . get_permalink( $wasnap_controller->getFirstProviderPage()->getId() ) . '">Click here</a> to log in.</p>
+            <ul>
+                <li>Username: ' . $this->getUsername() . '</li>
+                <li>Email: ' . $this->getEmail() . '</li>';
+
+        if ( $password !== NULL )
+        {
+            $message .= '<li>Password: ' . $password . '</li>';
+        }
+
+        $message.= '</ul>';
+
+        $headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+        wp_mail( $this->getEmail(), 'Provider Account Approval', $message, $headers );
+    }
+
     /**
      * @return bool
      */
@@ -588,6 +651,26 @@ class Provider {
         }
 
         return ( $this->isApproved() && $this->isProvider() );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDshs()
+    {
+        return Util::getBool( $this->is_dshs );
+    }
+
+    /**
+     * @param bool $is_dshs
+     *
+     * @return Provider
+     */
+    public function setIsDshs( $is_dshs )
+    {
+        $this->is_dshs = Util::setBool( $is_dshs );
+
+        return $this;
     }
 
     /**

@@ -51,7 +51,8 @@ if ( $provider->getId() === NULL )
     $provider
         ->setIsProfilePrivate( FALSE )
         ->setReceivesNotifications( TRUE )
-        ->setIsInProviderDirectory( TRUE );
+        ->setIsInProviderDirectory( TRUE )
+        ->setIsDshs( FALSE );
 }
 
 ?>
@@ -75,7 +76,8 @@ if ( $_POST )
         ->setProgramFocus( $_POST['program_focus'] )
         ->setIsProfilePrivate( $_POST['is_profile_private'] )
         ->setReceivesNotifications( $_POST['receives_notifications'] )
-        ->setIsInProviderDirectory( $_POST['is_in_provider_directory'] );
+        ->setIsInProviderDirectory( $_POST['is_in_provider_directory'] )
+        ->setIsDshs( $_POST['is_dshs'] );
 
     $is_approved = $_POST['is_approved'];
 }
@@ -200,6 +202,19 @@ if ( $_POST )
                 </td>
             </tr>
         <?php } ?>
+        <tr>
+            <th><label for="is_dshs">DSHS</label></th>
+            <td>
+                <select name="is_dshs" id="is_dshs" class="regular-text">
+                    <option value="0">
+                        This IS NOT the DSHS account
+                    </option>
+                    <option value="1"<?php if ( $provider->isDshs() ) { ?> selected<?php } ?>>
+                        This IS the DSHS account
+                    </option>
+                </select>
+            </td>
+        </tr>
 
     </table>
 

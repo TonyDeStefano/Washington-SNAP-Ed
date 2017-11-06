@@ -10,6 +10,14 @@
             }
         });
 
+        $('#send-approval-email').click(function(e){
+            e.preventDefault();
+            var b = confirm('Are you sure you want to send an approval email to this provider?');
+            if ( b ){
+                window.location = 'admin.php?page=wasnap_providers&action=view&send=true&id=' + $(this).data('id');
+            }
+        });
+
         $('#role').change(function(){
             if( $('#role').val() === 'provider' ) {
                 $('#provider-information').show();
