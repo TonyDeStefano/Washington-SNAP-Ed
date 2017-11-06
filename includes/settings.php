@@ -80,10 +80,17 @@
 		</strong>
 	</p>
 
-    <p>Main Provider Login and Registration Page:</p>
+    <p>Provider Dashboard:</p>
     <blockquote>
 
-        [wasnap]
+        [wasnap page="dashboard"]
+
+    </blockquote>
+
+    <p>Provider Forum:</p>
+    <blockquote>
+
+        [wasnap page="forum"]
 
     </blockquote>
 
@@ -94,11 +101,33 @@
 
     </blockquote>
 
-    <p>Provider Forum:</p>
+    <p>A password protected page just for providers:</p>
     <blockquote>
 
-        [wasnap page="forum"]
+        [wasnap]
+        <br><br>
+        Type your page content here (it will only show up after the provider has logged in).
+        <br><br>
+        [/wasnap]
 
+    </blockquote>
+
+    <p>If you wrap content in the [wasnap][/wasnap] tags above, you can use these placeholders for dynamic data from the Provider's profile:</p>
+
+    <blockquote>
+        - {first_name}<br>
+        - {last_name}<br>
+        - {full_name}<br>
+        - {agency}<br>
+        - {email}<br>
+        - {phone}<br>
+        - {url}<br>
+        - {address}<br>
+        - {address2}<br>
+        - {city}<br>
+        - {state}<br>
+        - {zip}<br>
+        - {html_address}<br>
     </blockquote>
 
 </div>

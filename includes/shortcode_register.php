@@ -232,3 +232,5 @@
     </div>
 
 </form>
+
+<div id="wasnap-entry-title">Register</div>

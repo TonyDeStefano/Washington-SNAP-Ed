@@ -42,3 +42,5 @@ $args = array (
 <p>
     <a href="/wp-login.php?action=lostpassword">Lost Password?</a>
 </p>
+
+<div id="wasnap-entry-title">Log In or Register</div>

@@ -9,8 +9,41 @@ class Controller {
 	const VERSION_CSS = '0.0.1';
 
 	private $errors;
+	private $content;
+	private $attributes = array();
 
-	/**
+	/** @var Provider $provider */
+	private $provider;
+
+	/** @var Page $shortcode_page */
+	private $shortcode_page;
+
+	/** @var Page[] $shortcode_pages */
+    private $shortcode_pages;
+
+    /**
+     * @return Provider
+     */
+    public function getProvider()
+    {
+        return $this->provider;
+    }
+
+    /**
+     * @param Provider $provider
+     *
+     * @return Controller
+     */
+    public function setProvider( $provider )
+    {
+        $this->provider = $provider;
+
+        return $this;
+    }
+
+
+
+    /**
 	 * @return mixed
 	 */
 	public function getErrors()
@@ -47,6 +80,11 @@ class Controller {
 		wp_enqueue_script( 'wasnap-js', plugin_dir_url( dirname( __DIR__ )  ) . 'js/wasnap.js', array( 'jquery' ), ( WP_DEBUG ) ? time() : self::VERSION_JS, TRUE );
 		wp_enqueue_style( 'wasnap-bootstrap-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/bootstrap.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 		wp_enqueue_style( 'wasnap-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/wasnap.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
+
+        if ( $this->provider === NULL )
+        {
+            $this->provider = Provider::load_from_user();
+        }
 	}
 
 	public function add_role()
@@ -70,6 +108,60 @@ class Controller {
 			{
 				switch ( $_POST['wasnap_action'] )
                 {
+                    case 'edit':
+
+                        if ( empty( $_POST['email'] ) || empty( $_POST['fname'] ) || empty( $_POST['lname'] ) || empty( $_POST['agency'] ) )
+                        {
+                            $this->addError( 'Please fill out all required fields' );
+                        }
+
+                        elseif ( ! is_email( $_POST['email'] ) )
+                        {
+                            $this->addError( 'Email is not valid' );
+                        }
+
+                        elseif ( strtolower( $_POST['email'] ) != strtolower( $this->getProvider()->getEmail() ) && email_exists( $_POST['email'] ) )
+                        {
+                            $this->addError( 'That email address is already in use' );
+                        }
+
+                        if ( count( $this->getErrors() ) == 0 )
+                        {
+                            $user_data = array (
+                                'user_email' => $_POST['email'],
+                                'first_name' => $_POST['fname'],
+                                'last_name' => $_POST['lname'],
+                                'user_url' => $_POST['url']
+                            );
+                            wp_update_user( $user_data );
+                            update_user_meta( $this->getProvider()->getId(), 'address', $_POST['address'] );
+                            update_user_meta( $this->getProvider()->getId(), 'address2', $_POST['address2'] );
+                            update_user_meta( $this->getProvider()->getId(), 'city', $_POST['city'] );
+                            update_user_meta( $this->getProvider()->getId(), 'state', $_POST['state'] );
+                            update_user_meta( $this->getProvider()->getId(), 'zip', $_POST['zip'] );
+                            update_user_meta( $this->getProvider()->getId(), 'agency', $_POST['agency'] );
+                            update_user_meta( $this->getProvider()->getId(), 'phone', $_POST['phone'] );
+                            update_user_meta( $this->getProvider()->getId(), 'region', $_POST['region'] );
+                            update_user_meta( $this->getProvider()->getId(), 'snap_ed_role', $_POST['snap_ed_role'] );
+                            update_user_meta( $this->getProvider()->getId(), 'program_focus', $_POST['program_focus'] );
+                            update_user_meta( $this->getProvider()->getId(), 'is_profile_private', $_POST['is_profile_private'] );
+                            update_user_meta( $this->getProvider()->getId(), 'is_in_provider_directory', $_POST['is_in_provider_directory'] );
+
+                            if ( isset( $_POST['receives_notifications'] ) )
+                            {
+                                update_user_meta( $this->getProvider()->getId(), 'receives_notifications', 1 );
+                            }
+                            else
+                            {
+                                update_user_meta( $this->getProvider()->getId(), 'receives_notifications', 0 );
+                            }
+
+                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'updated' ), TRUE ) );
+                            exit;
+                        }
+
+                        break;
+
                     case 'register':
 
                         if ( empty( $_POST['username'] ) || empty( $_POST['password'] ) || empty( $_POST['email'] ) || empty( $_POST['fname'] ) || empty( $_POST['lname'] ) || empty( $_POST['agency'] ) )
@@ -197,14 +289,55 @@ class Controller {
 		return $url . ( ( count( $querystring ) > 0 ) ? '?' . implode( '&', $querystring ) : '' );
 	}
 	
-	public function short_code()
+	public function short_code( $attributes, $content = NULL )
 	{
+        $this->attributes = shortcode_atts( array( 'page' => '' ), $attributes );
+        if ( $this->getProvider() !== NULL )
+        {
+            $this->content = $this->getProvider()->fill( $content );
+        }
+        $this->shortcode_page = $this->getProviderPages()[ get_the_ID() ];
+
 		ob_start();
 		include( dirname( dirname( __DIR__ ) ) . '/includes/shortcode.php');
 		$output = ob_get_contents();
 		ob_end_clean();
 		return $output;
 	}
+
+    /**
+     * @param $page
+     *
+     * @return bool
+     */
+	public function isShortCodePage( $page )
+    {
+        return ( isset( $this->attributes['page'] ) && $this->attributes['page'] == $page );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDashboardPage()
+    {
+        return $this->isShortCodePage( 'dashboard' );
+    }
+
+    /**
+     * @return bool
+     */
+	public function isDirectoryPage()
+    {
+        return $this->isShortCodePage( 'directory' );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isForumPage()
+    {
+        return $this->isShortCodePage( 'forum' );
+    }
 
 	public function admin_menus()
 	{
@@ -457,5 +590,95 @@ class Controller {
         }
 
         return $location;
+    }
+
+    /**
+     * @return Page[]
+     */
+    public function getProviderPages()
+    {
+        global $wpdb;
+
+        if ( $this->shortcode_pages === NULL )
+        {
+            $this->shortcode_pages = array();
+
+            $sql = "
+                SELECT
+                    ID,
+                    post_title,
+                    post_name,
+                    guid,
+                    post_content
+                FROM
+                    " . $wpdb->prefix . "posts
+                WHERE
+                    post_type = 'page'
+                    AND post_status = 'publish'
+                    AND post_content LIKE '%[wasnap%'
+                ORDER BY
+                    ID ASC";
+
+            $rows = $wpdb->get_results( $sql );
+
+            /* dashboard */
+            foreach ( $rows as $index => $row )
+            {
+                if ( strpos( $row->post_content, '[wasnap page="dashboard"]' ) !== FALSE )
+                {
+                    $this->shortcode_pages[ $row->ID ] = new Page( $row->ID, $row->post_title, $row->post_name, $row->guid, 'dashboard' );
+                    unset( $rows[ $index ] );
+                    break;
+                }
+            }
+
+            /* forum */
+            foreach ( $rows as $index => $row )
+            {
+                if ( strpos( $row->post_content, '[wasnap page="forum"]' ) !== FALSE )
+                {
+                    $this->shortcode_pages[ $row->ID ] = new Page( $row->ID, $row->post_title, $row->post_name, $row->guid, 'forum' );
+                    unset( $rows[ $index ] );
+                    break;
+                }
+            }
+
+            /* directory */
+            foreach ( $rows as $index => $row )
+            {
+                if ( strpos( $row->post_content, '[wasnap page="directory"]' ) !== FALSE )
+                {
+                    $this->shortcode_pages[ $row->ID ] = new Page( $row->ID, $row->post_title, $row->post_name, $row->guid, 'directory' );
+                    unset( $rows[ $index ] );
+                    break;
+                }
+            }
+
+            /* all others */
+            foreach ( $rows as $index => $row )
+            {
+                $this->shortcode_pages[ $row->ID ] = new Page( $row->ID, $row->post_title, $row->post_name, $row->guid, '' );
+            }
+        }
+
+        return $this->shortcode_pages;
+    }
+
+    /**
+     * @return Page[]
+     */
+    public function getProviderLinksPages()
+    {
+        $pages = [];
+
+        foreach ( $this->getProviderPages() as $page )
+        {
+            if ( $page->isProtected() && strlen( $page->getShortcodePage() ) > 0 )
+            {
+                $pages[] = $page;
+            }
+        }
+
+        return $pages;
     }
 }

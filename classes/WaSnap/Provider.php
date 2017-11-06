@@ -38,6 +38,19 @@ class Provider {
             ->read();
     }
 
+    /**
+     * @return null|Provider
+     */
+    public static function load_from_user()
+    {
+        if ( is_user_logged_in() )
+        {
+            return new Provider( wp_get_current_user()->ID );
+        }
+
+        return NULL;
+    }
+
     public function read()
     {
         if ( $this->id !== NULL )
@@ -562,5 +575,56 @@ class Provider {
     {
         $this->setApprovedAt( time() );
         update_user_meta( $this->id, 'approved_at', $this->getApprovedAt( 'Y-m-d H:i:s' ) );
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAccess()
+    {
+        if ( current_user_can( 'administrator' ) )
+        {
+            return TRUE;
+        }
+
+        return ( $this->isApproved() && $this->isProvider() );
+    }
+
+    /**
+     * @param $content
+     *
+     * @return mixed
+     */
+    public function fill( $content )
+    {
+        if ( $content === NULL )
+        {
+            return '';
+        }
+
+        $content = trim( $content );
+
+        $replacements =  array(
+            'first_name' => $this->getFirstName(),
+            'last_name' => $this->getLastName(),
+            'full_name' => $this->getFullName(),
+            'agency' => $this->getAgency(),
+            'email' => $this->getEmail(),
+            'url' => $this->getUrl(),
+            'phone' => $this->getPhone(),
+            'address' => $this->getAddress(),
+            'address2' => $this->getAddress2(),
+            'city' => $this->getCity(),
+            'state' => $this->getState(),
+            'zip' => $this->getZip(),
+            'html_address' => $this->getAddressHtml()
+        );
+
+        foreach ( $replacements as $find => $replace )
+        {
+            $content = str_replace( '{' . $find . '}', $replace, $content );
+        }
+
+        return $content;
     }
 }

@@ -5,3 +5,44 @@ a.btn {
 #provider-information {
     display: none;
 }
+
+ul.provider-links {
+    list-style-type: none;
+    margin: 0 0 15px !important;
+    padding: 0;
+    border: 1px solid #ccc;
+    background: #eee;
+}
+
+ul.provider-links:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+ul.provider-links li {
+    display: inline-block;
+    float: left;
+}
+
+ul.provider-links li a {
+    display: block;
+    padding: 8px;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    border-right: 1px solid #ccc;
+    font-size: 75%;
+    color: #000;
+}
+
+ul.provider-links li a:hover {
+    color: #000;
+}
+
+ul.provider-links li a.selected {
+    background-color: #ddd;
+}
+
+#wasnap-entry-title {
+    display: none;
+}
