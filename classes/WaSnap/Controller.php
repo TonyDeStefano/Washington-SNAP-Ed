@@ -41,7 +41,64 @@ class Controller {
         return $this;
     }
 
+    public function add_post_types()
+    {
+        $labels = array (
+            'name' => __( 'SNAP-Ed Messages' ),
+            'singular_name' => __( 'SNAP-Ed Message' ),
+            'add_new_item' => __( 'Add New SNAP-Ed Message' ),
+            'edit_item' => __( 'Edit SNAP-Ed Message' ),
+            'new_item' => __( 'New SNAP-Ed Message' ),
+            'view_item' => __( 'View SNAP-Ed Message' ),
+            'search_items' => __( 'Search SNAP-Ed Messages' ),
+            'not_found' => __( 'No SNAP-Ed Messages found.' )
+        );
 
+        $args = array (
+            'labels' => $labels,
+            'hierarchical' => FALSE,
+            'description' => 'SNAP-Ed Messages',
+            'supports' => array('title', 'editor'),
+            'public' => TRUE,
+            'show_ui' => TRUE,
+            'show_in_menu' => 'wasnap',
+            'menu_position' => NULL,
+            'show_in_nav_menus' => TRUE,
+            'publicly_queryable' => TRUE,
+            'exclude_from_search' => FALSE,
+            'has_archive' => TRUE,
+        );
+
+        register_post_type('wasnap_message', $args);
+
+        $labels = array (
+            'name' => __( 'DSHS Messages' ),
+            'singular_name' => __( 'DSHS Message' ),
+            'add_new_item' => __( 'Add New DSHS Message' ),
+            'edit_item' => __( 'Edit DSHS Message' ),
+            'new_item' => __( 'New DSHS Message' ),
+            'view_item' => __( 'View DSHS Message' ),
+            'search_items' => __( 'Search DSHS Messages' ),
+            'not_found' => __( 'No DSHS Messages found.' )
+        );
+
+        $args = array (
+            'labels' => $labels,
+            'hierarchical' => FALSE,
+            'description' => 'DSHS Messages',
+            'supports' => array('title', 'editor'),
+            'public' => TRUE,
+            'show_ui' => TRUE,
+            'show_in_menu' => 'wasnap',
+            'menu_position' => NULL,
+            'show_in_nav_menus' => TRUE,
+            'publicly_queryable' => TRUE,
+            'exclude_from_search' => FALSE,
+            'has_archive' => TRUE
+        );
+
+        register_post_type('wasnap_dshs_message', $args);
+    }
 
     /**
 	 * @return mixed
@@ -652,6 +709,17 @@ class Controller {
                 if ( strpos( $row->post_content, '[wasnap page="directory"]' ) !== FALSE )
                 {
                     $this->shortcode_pages[ $row->ID ] = new Page( $row->ID, $row->post_title, $row->post_name, $row->guid, 'directory' );
+                    unset( $rows[ $index ] );
+                    break;
+                }
+            }
+
+            /* menu */
+            foreach ( $rows as $index => $row )
+            {
+                if ( strpos( $row->post_content, '[wasnap page="menu"]' ) !== FALSE )
+                {
+                    $this->shortcode_pages[ $row->ID ] = new Page( $row->ID, $row->post_title, $row->post_name, $row->guid, 'menu' );
                     unset( $rows[ $index ] );
                     break;
                 }

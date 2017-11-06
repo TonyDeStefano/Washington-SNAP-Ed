@@ -13,7 +13,8 @@ class Page {
         '',
         'dashboard',
         'forum',
-        'directory'
+        'directory',
+        'menu'
     );
 
     public function __construct( $id, $title, $post_name, $guid, $shortcode_page )

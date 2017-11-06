@@ -48,6 +48,9 @@ add_shortcode( 'wasnap', array( $wasnap_controller, 'short_code' ) );
 /* add role */
 add_action( 'init', array( $wasnap_controller, 'add_role' ) );
 
+/* add post types */
+add_action( 'init', array( $wasnap_controller, 'add_post_types' ) );
+
 /* admin stuff */
 if (is_admin() )
 {

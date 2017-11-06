@@ -69,7 +69,7 @@ $action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
             }
             elseif ( $this->isDashboardPage() )
             {
-
+                include( 'shortcode_dashboard.php' );
             }
             elseif ( $this->isDirectoryPage() )
             {

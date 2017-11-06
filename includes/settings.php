@@ -112,6 +112,17 @@
 
     </blockquote>
 
+    <p>A password protected page just for providers that shows up on the menu:</p>
+    <blockquote>
+
+        [wasnap page="menu"]
+        <br><br>
+        Type your page content here (it will only show up after the provider has logged in).
+        <br><br>
+        [/wasnap]
+
+    </blockquote>
+
     <p>If you wrap content in the [wasnap][/wasnap] tags above, you can use these placeholders for dynamic data from the Provider's profile:</p>
 
     <blockquote>
