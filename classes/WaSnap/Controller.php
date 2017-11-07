@@ -134,9 +134,17 @@ class Controller {
 		wp_enqueue_media();
 		add_thickbox();
 		wp_enqueue_style( 'wasnap-fa', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_JS, TRUE );
-		wp_enqueue_script( 'wasnap-js', plugin_dir_url( dirname( __DIR__ )  ) . 'js/wasnap.js', array( 'jquery' ), ( WP_DEBUG ) ? time() : self::VERSION_JS, TRUE );
 		wp_enqueue_style( 'wasnap-bootstrap-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/bootstrap.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 		wp_enqueue_style( 'wasnap-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/wasnap.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
+
+        wp_enqueue_script( 'wasnap-js', plugin_dir_url( dirname( __DIR__ )  ) . 'js/wasnap.js', array( 'jquery' ), ( WP_DEBUG ) ? time() : self::VERSION_JS, TRUE );
+		wp_localize_script(
+		    'wasnap-js',
+            'wasnap',
+            array(
+                'ajaxurl' => admin_url( 'admin-ajax.php' )
+            )
+        );
 
         if ( $this->provider === NULL )
         {
@@ -627,6 +635,11 @@ class Controller {
             $provider->sendApproval( $_REQUEST['password'] );
         }
 
+        if ( isset( $_POST['is_dshs'] ) )
+        {
+            update_user_meta( $user_id, 'is_dshs', $_POST['is_dshs'] );
+        }
+
         return TRUE;
     }
 
@@ -762,5 +775,74 @@ class Controller {
         {
             return $page;
         }
+    }
+
+    public function disable_richedit( $default )
+    {
+        global $post;
+
+        if ( get_post_type( $post ) == 'wasnap_dshs_message' || get_post_type( $post ) == 'wasnap_message' )
+        {
+            return FALSE;
+        }
+        return $default;
+    }
+
+    public function dshs_message_save()
+    {
+        $return = [
+            'success' => 0,
+            'id_in' => $_POST['id'],
+            'id_out' => '',
+            'message' => $_POST['message'],
+            'error' => '',
+            'date' => ''
+        ];
+
+        if ( $return['id_in'] == 'new' )
+        {
+            $arguments = array(
+                'post_content' => $return['message'],
+                'post_content_filtered' => '',
+                'post_title' => date( 'F j, Y g:i a' ),
+                'post_excerpt' => '',
+                'post_status' => 'publish',
+                'post_type' => 'wasnap_dshs_message',
+                'comment_status' => 'closed',
+                'ping_status' => '',
+                'post_password' => '',
+                'to_ping' =>  '',
+                'pinged' => '',
+                'post_parent' => 0,
+                'menu_order' => 0,
+                'guid' => '',
+                'import_id' => 0,
+                'context' => '',
+            );
+
+            $return['date'] = date('n/j/Y');
+            $return['id_out'] = wp_insert_post( $arguments );
+        }
+        else
+        {
+            $return['id_out'] = wp_update_post( array(
+                'ID' => $return['id_in'],
+                'post_content' => $return['message']
+            ) );
+        }
+
+        wp_send_json( $return );
+    }
+
+    public function dshs_message_delete()
+    {
+        if ( $post = get_post( $_POST['id'] ) )
+        {
+            if ( $post->post_type == 'wasnap_dshs_message' )
+            {
+                wp_delete_post( $_POST['id'] );
+            }
+        }
+        wp_send_json( array( 'id' => $_POST['id'] ) );
     }
 }

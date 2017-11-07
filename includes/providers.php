@@ -115,6 +115,13 @@ if ( isset( $_GET[ 'action' ] ) )
                                 <li>
                                     <strong>Program Focus:</strong>
                                     <?php echo $provider->getProgramFocus(); ?>
+                                </li><li>
+                                    <strong>DSHS Account:</strong>
+                                    <?php if ( $provider->isDshs() ) { ?>
+                                        <span class="label label-success">Yes</span>
+                                    <?php } else { ?>
+                                        <span class="label label-danger">No</span>
+                                    <?php } ?>
                                 </li>
                             </ul>
                         </div>

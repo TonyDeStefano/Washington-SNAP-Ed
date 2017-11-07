@@ -51,8 +51,21 @@ add_action( 'init', array( $wasnap_controller, 'add_role' ) );
 /* add post types */
 add_action( 'init', array( $wasnap_controller, 'add_post_types' ) );
 
+/* remove HTML editor for CPTs */
+add_filter( 'user_can_richedit', array( $wasnap_controller, 'disable_richedit' ) );
+
+add_action( 'wp_ajax_wasnap_dshs_message_save', function() use ( $wasnap_controller )
+{
+    $wasnap_controller->dshs_message_save();
+} );
+
+add_action( 'wp_ajax_wasnap_dshs_message_delete', function() use ( $wasnap_controller )
+{
+    $wasnap_controller->dshs_message_delete();
+} );
+
 /* admin stuff */
-if (is_admin() )
+if ( is_admin() )
 {
 	/* Add main menu and sub-menus */
 	add_action( 'admin_menu', array( $wasnap_controller, 'admin_menus') );

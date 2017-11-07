@@ -645,12 +645,7 @@ class Provider {
      */
     public function hasAccess()
     {
-        if ( current_user_can( 'administrator' ) )
-        {
-            return TRUE;
-        }
-
-        return ( $this->isApproved() && $this->isProvider() );
+        return ( $this->isAdmin() || ( $this->isApproved() && $this->isProvider() ) );
     }
 
     /**
@@ -709,5 +704,21 @@ class Provider {
         }
 
         return $content;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return ( current_user_can( 'administrator' ) );
+    }
+
+    /**
+     * @return bool
+     */
+    public function canAdminDshsMessages()
+    {
+        return ( $this->isDshs() || $this->isAdmin() );
     }
 }
