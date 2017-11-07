@@ -173,6 +173,51 @@ class Controller {
 			{
 				switch ( $_POST['wasnap_action'] )
                 {
+                    case 'delete_approved_emails':
+
+                        $approved_emails = $this->getApprovedEmails();
+
+                        if ( isset( $_POST['delete'] ) )
+                        {
+                            $emails = $_POST['delete'];
+                            foreach ( $emails as $email )
+                            {
+                                $index = array_search( $email, $approved_emails );
+                                if ( $index !== FALSE )
+                                {
+                                    unset( $approved_emails[ $index ] );
+                                }
+                            }
+                        }
+
+                        update_option( 'wasnap_approved', json_encode( $approved_emails ) );
+                        header( 'Location: admin.php?page=wasnap_approved' );
+                        exit;
+
+                    case 'add_approved_emails':
+
+                        $emails = $_POST['emails'];
+                        $emails = str_replace( "\r", ',', $emails );
+                        $emails = str_replace( "\n", ',', $emails );
+                        $emails = str_replace( " ", ',', $emails );
+                        $emails = str_replace( ";", ',', $emails );
+                        $emails = explode( ',', $emails );
+
+                        $approved_emails = $this->getApprovedEmails();
+
+                        foreach ( $emails as $email )
+                        {
+                            $email = trim( strtolower( $email ) );
+                            if ( is_email( trim( $email ) ) && ! in_array( $email, $approved_emails ) )
+                            {
+                                $approved_emails[] = $email;
+                            }
+                        }
+
+                        update_option( 'wasnap_approved', json_encode( $approved_emails ) );
+                        header( 'Location: admin.php?page=wasnap_approved' );
+                        exit;
+
                     case 'edit':
 
                         if ( empty( $_POST['email'] ) || empty( $_POST['fname'] ) || empty( $_POST['lname'] ) || empty( $_POST['agency'] ) )
@@ -299,7 +344,13 @@ class Controller {
                                 update_user_meta( $user_id, 'receives_notifications', 0 );
                             }
 
-                            if ( count( $this->getEmails() ) > 0 )
+                            if ( in_array( strtolower( $_POST['email'] ), $this->getApprovedEmails() ) )
+                            {
+                                update_user_meta( $user_id, 'approved_at', date( 'Y-m-d H:i:s' ) );
+                                $provider = new Provider( $user_id );
+                                $provider->sendApproval( $_REQUEST['password'] );
+                            }
+                            elseif ( count( $this->getEmails() ) > 0 )
                             {
                                 $message = '
                                     <p><strong>' . $_POST['agency'] . '</strong> has just registered to be a provider on the website.</p>
@@ -410,6 +461,7 @@ class Controller {
 		add_menu_page( 'SNAP-Ed', 'SNAP-Ed', 'manage_options', 'wasnap', array( $this, 'print_settings_page' ), 'dashicons-carrot' );
 		add_submenu_page( 'wasnap', 'Settings', 'Settings', 'manage_options', 'wasnap' );
         add_submenu_page( 'wasnap', 'Providers', 'Providers', 'manage_options', 'wasnap_providers', array( $this, 'print_providers_page' ) );
+        add_submenu_page( 'wasnap', 'Pre-Approved Providers', 'Pre-Approved Providers', 'manage_options', 'wasnap_approved', array( $this, 'print_approved_page' ) );
 	}
 	
 	public function register_settings()
@@ -473,6 +525,15 @@ class Controller {
 
         return ( $as_list ) ? implode( ', ', $emails ) : $emails;
     }
+
+    /**
+     * @return array
+     */
+    public function getApprovedEmails()
+    {
+        $approved_emails = trim( get_option( 'wasnap_approved' , '' ) );
+        return ( strlen ( $approved_emails ) == 0 ) ? array() : json_decode( $approved_emails, TRUE );
+    }
 	
 	public function admin_scripts()
 	{
@@ -513,6 +574,11 @@ class Controller {
     public function print_providers_page()
     {
         include( dirname( dirname( __DIR__ ) ) . '/includes/providers.php' );
+    }
+
+    public function print_approved_page()
+    {
+        include( dirname( dirname( __DIR__ ) ) . '/includes/approved.php' );
     }
 
 	public function create_nonce()

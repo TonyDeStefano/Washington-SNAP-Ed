@@ -175,8 +175,6 @@ if ( isset( $_GET[ 'action' ] ) )
 
         <?php } ?>
 
-    <?php } elseif ( $action == 'edit' ) { ?>
-
     <?php } else { ?>
 
         <h1>
