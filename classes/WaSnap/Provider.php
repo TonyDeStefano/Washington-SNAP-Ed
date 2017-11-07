@@ -59,42 +59,47 @@ class Provider {
         {
             if ( $user = get_user_by( 'ID', $this->id ) )
             {
-                $this
-                    ->setId( $user->ID )
-                    ->setUsername( $user->user_login )
-                    ->setFirstName( $user->user_firstname )
-                    ->setLastName( $user->user_lastname )
-                    ->setEmail( $user->user_email )
-                    ->setUrl( $user->user_url )
-                    ->setAgency( get_user_meta( $user->ID, 'agency', TRUE ) )
-                    ->setAddress( get_user_meta( $user->ID, 'address', TRUE ) )
-                    ->setAddress2( get_user_meta( $user->ID, 'address2', TRUE ) )
-                    ->setCity( get_user_meta( $user->ID, 'city', TRUE ) )
-                    ->setState( get_user_meta( $user->ID, 'state', TRUE ) )
-                    ->setZip( get_user_meta( $user->ID, 'zip', TRUE ) )
-                    ->setPhone( get_user_meta( $user->ID, 'phone', TRUE ) )
-                    ->setRegion( get_user_meta( $user->ID, 'region', TRUE ) )
-                    ->setSnapEdRole( get_user_meta( $user->ID, 'snap_ed_role', TRUE ) )
-                    ->setProgramFocus( get_user_meta( $user->ID, 'program_focus', TRUE ) )
-                    ->setReceivesNotifications( get_user_meta( $user->ID, 'receives_notifications', TRUE ) )
-                    ->setIsInProviderDirectory( get_user_meta( $user->ID, 'is_in_provider_directory', TRUE ) )
-                    ->setIsProfilePrivate( get_user_meta( $user->ID, 'is_profile_private', TRUE ) )
-                    ->setApprovedAt( get_user_meta( $user->ID, 'approved_at', TRUE ) )
-                    ->setApprovalSentAt( get_user_meta( $user->ID, 'approval_sent_at', TRUE ) )
-                    ->setIsDshs( get_user_meta( $user->ID, 'is_dshs', TRUE ) );
-
-                foreach ( $user->roles as $role )
-                {
-                    if ( $role == 'provider' )
-                    {
-                        $this->setIsProvider( TRUE );
-                        break;
-                    }
-                }
+                $this->loadFromUserObject( $user );
             }
             else
             {
                 $this->setId( NULL );
+            }
+        }
+    }
+
+    public function loadFromUserObject( $user )
+    {
+        $this
+            ->setId( $user->ID )
+            ->setUsername( $user->user_login )
+            ->setFirstName( $user->user_firstname )
+            ->setLastName( $user->user_lastname )
+            ->setEmail( $user->user_email )
+            ->setUrl( $user->user_url )
+            ->setAgency( get_user_meta( $user->ID, 'agency', TRUE ) )
+            ->setAddress( get_user_meta( $user->ID, 'address', TRUE ) )
+            ->setAddress2( get_user_meta( $user->ID, 'address2', TRUE ) )
+            ->setCity( get_user_meta( $user->ID, 'city', TRUE ) )
+            ->setState( get_user_meta( $user->ID, 'state', TRUE ) )
+            ->setZip( get_user_meta( $user->ID, 'zip', TRUE ) )
+            ->setPhone( get_user_meta( $user->ID, 'phone', TRUE ) )
+            ->setRegion( get_user_meta( $user->ID, 'region', TRUE ) )
+            ->setSnapEdRole( get_user_meta( $user->ID, 'snap_ed_role', TRUE ) )
+            ->setProgramFocus( get_user_meta( $user->ID, 'program_focus', TRUE ) )
+            ->setReceivesNotifications( get_user_meta( $user->ID, 'receives_notifications', TRUE ) )
+            ->setIsInProviderDirectory( get_user_meta( $user->ID, 'is_in_provider_directory', TRUE ) )
+            ->setIsProfilePrivate( get_user_meta( $user->ID, 'is_profile_private', TRUE ) )
+            ->setApprovedAt( get_user_meta( $user->ID, 'approved_at', TRUE ) )
+            ->setApprovalSentAt( get_user_meta( $user->ID, 'approval_sent_at', TRUE ) )
+            ->setIsDshs( get_user_meta( $user->ID, 'is_dshs', TRUE ) );
+
+        foreach ( $user->roles as $role )
+        {
+            if ( $role == 'provider' )
+            {
+                $this->setIsProvider( TRUE );
+                break;
             }
         }
     }
@@ -720,5 +725,82 @@ class Provider {
     public function canAdminDshsMessages()
     {
         return ( $this->isDshs() || $this->isAdmin() );
+    }
+
+    /**
+     * @param null $in_directory
+     * @param null $alpha
+     * @param null $search
+     *
+     * @return Provider[]
+     */
+    public static function getProviders( $in_directory = NULL, $alpha = NULL, $search = NULL )
+    {
+        $providers = array();
+
+        $args = array(
+            'role' => 'provider',
+            'meta_key' => 'agency',
+            'orderby' => 'agency'
+        );
+
+        $users = get_users( $args );
+
+        foreach ( $users as $user )
+        {
+            $provider = new Provider;
+            $provider->loadFromUserObject( $user );
+
+            if ( $in_directory !== NULL )
+            {
+                if ( $in_directory !== $provider->isInProviderDirectory() )
+                {
+                    continue;
+                }
+            }
+
+            if ( $alpha !== NULL )
+            {
+                if ( strtoupper( $alpha ) != substr( strtoupper( $provider->getAgency() ), 0, strlen( $alpha ) ) )
+                {
+                    continue;
+                }
+            }
+
+            if ( $search !== NULL )
+            {
+                $found = FALSE;
+
+                if ( ! $found && strpos( strtoupper( $provider->getAgency() ), strtoupper( $search ) ) !== FALSE )
+                {
+                    $found = TRUE;
+                }
+
+                if ( ! $found && strpos( strtoupper( $provider->getProgramFocus() ), strtoupper( $search ) ) !== FALSE )
+                {
+                    $found = TRUE;
+                }
+
+                if ( ! $found )
+                {
+                    continue;
+                }
+            }
+
+            $providers[ $provider->getId() ] = $provider;
+        }
+
+        return $providers;
+    }
+
+    /**
+     * @param $alpha
+     * @param $search
+     *
+     * @return Provider[]
+     */
+    public static function getDirectoryProviders( $alpha = NULL, $search = NULL )
+    {
+        return self::getProviders( TRUE, $alpha, $search );
     }
 }

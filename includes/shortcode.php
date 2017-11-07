@@ -73,7 +73,7 @@ $action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
             }
             elseif ( $this->isDirectoryPage() )
             {
-
+                include( 'shortcode_directory.php' );
             }
             elseif ( $this->isForumPage() )
             {
