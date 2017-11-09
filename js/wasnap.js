@@ -29,6 +29,19 @@
             });
         });
 
+        $('.wasnap-toggle-more').click(function(){
+            var state = $(this).data('state');
+            if ( state === 'closed' ) {
+                $(this).data('state', 'open');
+                $(this).closest('.wasnap-provider').find('.wasnap-more').show();
+                $(this).find('.fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            } else {
+                $(this).data('state', 'closed');
+                $(this).closest('.wasnap-provider').find('.wasnap-more').hide();
+                $(this).find('.fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            }
+        });
+
     });
 
 })(jQuery);

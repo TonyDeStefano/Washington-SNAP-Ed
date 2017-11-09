@@ -43,24 +43,6 @@ $action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
 
         <?php if ( $this->getProvider()->hasAccess() ) { ?>
 
-            <?php $pages = $this->getProviderPages(); ?>
-            <?php if ( count( $pages ) > 0 ) { ?>
-                <ul class="provider-links">
-                    <?php foreach ( $this->getProviderLinksPages() as $index => $page ) { ?>
-                        <li>
-                            <a href="<?php echo get_permalink( $page->getId() ); ?>"<?php if ( $page->getId() == $this->shortcode_page->getId() && $action != 'edit' && $action !== 'updated' ) { ?> class="selected"<?php } ?>>
-                                <?php echo $page->getTitle(); ?>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <li>
-                        <a href="<?php echo $this->add_to_querystring( array( 'action' => 'edit' ) ); ?>"<?php if ( $action == 'edit' || $action == 'updated' ) { ?> class="selected"<?php } ?>>
-                            My Information
-                        </a>
-                    </li>
-                </ul>
-            <?php } ?>
-
             <?php
 
             if ( $action == 'edit' || $action == 'updated' )

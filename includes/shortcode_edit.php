@@ -230,8 +230,11 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <p>
                     <button class="btn btn-default">
-                        Update My Profile
+                        Save My Info
                     </button>
+                    <a href="<?php echo $this->add_to_querystring( array(), TRUE ); ?>" class="btn btn-danger">
+                        Cancel
+                    </a>
                 </p>
             </div>
         </div>

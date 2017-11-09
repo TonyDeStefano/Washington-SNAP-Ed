@@ -46,3 +46,15 @@ ul.provider-links li a.selected {
 #wasnap-entry-title {
     display: none;
 }
+
+button.btn {
+    text-transform: none;
+}
+
+.wasnap-more {
+    display: none;
+}
+
+.wasnap-toggle-more {
+    cursor: pointer;
+}

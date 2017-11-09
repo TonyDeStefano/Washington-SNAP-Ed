@@ -36,43 +36,52 @@ $providers = \WaSnap\Provider::getDirectoryProviders();
 <?php foreach ( $providers as $provider ) { ?>
 
     <div class="well wasnap-provider">
-        <div class="row">
-            <div class="col-md-6">
-                <p class="wasnap-search">
-                    <strong><?php echo $provider->getAgency(); ?></strong><br>
-                    <?php echo $provider->getAddressHtml(); ?><br>
-                    <?php echo $provider->getPhone(); ?>
-                </p>
+        <div class="row wasnap-toggle-more" data-state="closed">
+            <div class="col-md-11">
+                <strong><?php echo $provider->getAgency(); ?></strong>
             </div>
-            <div class="col-md-6">
-                <p class="wasnap-search">
-                    <?php if ( ! $provider->isProfilePrivate() ) { ?>
-                        <?php echo $provider->getFullName(); ?><br>
-                        <a href="mailto:<?php echo $provider->getEmail(); ?>"><?php echo $provider->getEmail(); ?></a>
-                    <?php } ?>
-                    <?php if ( strlen( $provider->getUrl() ) > 0 ) { ?>
+            <div class="col-md-1">
+                <i class="fa fa-chevron-down"></i>
+            </div>
+        </div>
+        <div class="wasnap-more">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="wasnap-search">
+                        <?php echo $provider->getAddressHtml(); ?><br>
+                        <?php echo $provider->getPhone(); ?>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="wasnap-search">
+                        <?php if ( ! $provider->isProfilePrivate() ) { ?>
+                            <?php echo $provider->getFullName(); ?><br>
+                            <a href="mailto:<?php echo $provider->getEmail(); ?>"><?php echo $provider->getEmail(); ?></a>
+                        <?php } ?>
+                        <?php if ( strlen( $provider->getUrl() ) > 0 ) { ?>
+                            <br>
+                            <?php echo $provider->getUrl( TRUE ); ?>
+                        <?php } ?>
                         <br>
-                        <?php echo $provider->getUrl( TRUE ); ?>
-                    <?php } ?>
-                    <br>
-                    <strong>Region:</strong>
-                    <?php echo $provider->getRegion(); ?>
-                    <br>
-                    <strong>SNAP-Ed Role:</strong>
-                    <?php echo $provider->getSnapEdRole(); ?>
-                </p>
+                        <strong>Region:</strong>
+                        <?php echo $provider->getRegion(); ?>
+                        <br>
+                        <strong>SNAP-Ed Role:</strong>
+                        <?php echo $provider->getSnapEdRole(); ?>
+                    </p>
+                </div>
             </div>
+            <?php if ( strlen ( $provider->getProgramFocus() ) > 0 ) { ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>
+                            <strong>Program Focus:</strong>
+                            <span class="wasnap-search"><?php echo $provider->getProgramFocus(); ?></span>
+                        </p>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
-        <?php if ( strlen ( $provider->getProgramFocus() ) > 0 ) { ?>
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <strong>Program Focus:</strong>
-                    <span class="wasnap-search"><?php echo $provider->getProgramFocus(); ?></span>
-                </p>
-            </div>
-        </div>
-        <?php } ?>
     </div>
 
 <?php } ?>
