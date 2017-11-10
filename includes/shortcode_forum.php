@@ -126,9 +126,11 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
                     <?php echo $question->getContent(); ?>
                     <?php if ( $this->getProvider()->isAdmin() ) { ?>
                         <div class="text-right" style="margin: 5px 0 0;">
-                            <a href="#" class="btn btn-danger btn-xs wasnap-delete-post" data-id="<?php echo $question->getId(); ?>">
-                                <i class="fa fa-times"></i>
-                            </a>
+                            <a
+                                href="<?php echo $this->add_to_querystring( array( 'action' => 'view', 'id' => $question->getId(), 'delete' => $question->getId() ), TRUE, $forum_url ); ?>"
+                                class="btn btn-danger btn-xs wasnap-delete-post"
+                                data-id="<?php echo $question->getId(); ?>"
+                            ><i class="fa fa-times"></i></a>
                         </div>
                     <?php } ?>
                 </div>
@@ -174,9 +176,9 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
                             <?php if ( $this->getProvider()->isAdmin() ) { ?>
                                 <div class="text-right" style="margin: 5px 0 0;">
                                     <a
-                                            href="<?php echo $this->add_to_querystring( array( 'action' => 'view', 'id' => $question->getId(), 'delete' => $answer->getId() ), TRUE, $forum_url ); ?>"
-                                            class="btn btn-danger btn-xs wasnap-delete-post"
-                                            data-id="<?php echo $question->getId(); ?>"
+                                        href="<?php echo $this->add_to_querystring( array( 'action' => 'view', 'id' => $question->getId(), 'delete' => $answer->getId() ), TRUE, $forum_url ); ?>"
+                                        class="btn btn-danger btn-xs wasnap-delete-post"
+                                        data-id="<?php echo $question->getId(); ?>"
                                     ><i class="fa fa-times"></i></a>
                                 </div>
                             <?php } ?>
