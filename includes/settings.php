@@ -87,6 +87,13 @@
 
     </blockquote>
 
+    <p>Provider Manage Profile:</p>
+    <blockquote>
+
+        [wasnap page="edit"]
+
+    </blockquote>
+
     <p>Provider Forum:</p>
     <blockquote>
 

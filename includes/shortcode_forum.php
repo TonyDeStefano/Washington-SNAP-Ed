@@ -119,42 +119,48 @@ $providers = \WaSnap\Provider::getProviders();
             <?php } ?>
         </div>
 
-        <?php foreach ( $question->getAnswers() as $answer )  { ?>
+        <?php if ( count ( $question->getAnswers() ) > 0 ) { ?>
 
-            <div class="row">
-                <div class="col-sm-1">
-                    <img src="<?php echo get_avatar_url( $answer->getProviderId() ); ?>" class="img-responsive">
-                </div>
-                <div class="col-sm-11">
-                    <div class="well">
-                        <p style="margin-bottom:5px;"><?php echo $answer->getContent(); ?></p>
-                        <em style="font-size:60%;">
-                            <?php
+            <table class="table table-bordered" style="margin-top:20px;">
 
-                            if ( isset( $providers[ $answer->getProviderId() ] ) )
-                            {
-                                $provider = $providers[ $answer->getProviderId() ];
-                                if ( ! $provider->isProfilePrivate() )
+                <?php foreach ( $question->getAnswers() as $answer )  { ?>
+
+                    <tr>
+                        <td>
+                            <p>
+                                <img src="<?php echo get_avatar_url( $answer->getProviderId() ); ?>" class="img-responsive">
+                            </p>
+                        </td>
+                        <td style="width:80%">
+                            <p style="margin-bottom:5px;"><?php echo $answer->getContent(); ?></p>
+                            <em style="font-size:60%;">
+                                <?php
+
+                                if ( isset( $providers[ $answer->getProviderId() ] ) )
                                 {
-                                    echo $provider->getFullName() . ' with ';
+                                    $provider = $providers[ $answer->getProviderId() ];
+                                    if ( ! $provider->isProfilePrivate() )
+                                    {
+                                        echo $provider->getFullName() . ' with ';
+                                    }
+
+                                    echo '<strong>' . $provider->getAgency() . '</strong>';
+                                }
+                                else
+                                {
+                                    echo 'Admin';
                                 }
 
-                                echo '<strong>' . $provider->getAgency() . '</strong>';
-                            }
-                            else
-                            {
-                                echo 'Admin';
-                            }
+                                ?>
+                                on
+                                <?php echo $question->getCreatedAt( 'l, F j, Y' ); ?>
+                            </em>
+                        </td>
+                    </tr>
 
-                            ?>
-                            on
-                            <?php echo $question->getCreatedAt( 'l, F j, Y' ); ?>
-                        </em>
-                    </div>
-                </div>
-            </div>
+                <?php } ?>
 
-            <hr>
+            </table>
 
         <?php } ?>
 
@@ -203,11 +209,10 @@ $providers = \WaSnap\Provider::getProviders();
     $questions = \WaSnap\Question::getForumQuestions( $page );
     ?>
 
+    <h3>Provider Forum</h3>
+
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">
-                Provider Forum
-            </h3>
             <p>
                 <a href="<?php echo $this->add_to_querystring( [ 'action' => 'ask' ], FALSE, $forum_url ); ?>" class="btn btn-default btn-sm">
                     Ask a Question

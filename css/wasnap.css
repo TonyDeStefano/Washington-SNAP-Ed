@@ -82,3 +82,8 @@ button.btn {
 .img-responsive {
     max-width: 100%;
 }
+
+#wasnap {
+    background: #FFF;
+    padding: 5px;
+}

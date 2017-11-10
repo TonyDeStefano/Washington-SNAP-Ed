@@ -6,7 +6,7 @@ class Controller {
 	
 	const VERSION = '0.0.1';
 	const VERSION_JS = '0.0.4';
-	const VERSION_CSS = '0.0.4';
+	const VERSION_CSS = '0.0.7';
 
 	private $errors;
 	private $content;
@@ -563,6 +563,14 @@ class Controller {
     /**
      * @return bool
      */
+    public function isEditPage()
+    {
+        return $this->isShortCodePage( 'edit' );
+    }
+
+    /**
+     * @return bool
+     */
     public function isDashboardPage()
     {
         return $this->isShortCodePage( 'dashboard' );
@@ -971,6 +979,17 @@ class Controller {
         }
     }
 
+    public function getDashboardUrl()
+    {
+        foreach ( $this->getProviderLinksPages() as $page )
+        {
+            if ( $page->getShortcodePage() == 'dashboard' )
+            {
+                return get_permalink( $page->getId() );
+            }
+        }
+    }
+
     public function getForumPageUrl()
     {
         foreach ( $this->getProviderLinksPages() as $page )
@@ -981,7 +1000,7 @@ class Controller {
             }
         }
 
-        return $this->add_to_querystring( array( 'page' => 'forum' ) );
+        return $this->add_to_querystring( array( 'page' => 'forum' ), TRUE, $this->getDashboardUrl() );
     }
 
     public function disable_richedit( $default )
