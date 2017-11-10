@@ -30,6 +30,9 @@ require_once ( 'classes/WaSnap/Util.php' );
 require_once ( 'classes/WaSnap/Provider.php' );
 require_once ( 'classes/WaSnap/ProviderTable.php' );
 require_once ( 'classes/WaSnap/Page.php' );
+require_once ( 'classes/WaSnap/ForumPost.php' );
+require_once ( 'classes/WaSnap/Question.php' );
+require_once ( 'classes/WaSnap/Answer.php' );
 
 $wasnap_controller = new \WaSnap\Controller;
 

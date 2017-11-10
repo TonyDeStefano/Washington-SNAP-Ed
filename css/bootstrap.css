@@ -2697,3 +2697,15 @@ a.label:focus {
     max-width: 100%;
     height: auto;
 }
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}

@@ -4,15 +4,13 @@
 
 ?>
 
-<p>
-    <a class="btn btn-default" href="<?php echo $this->add_to_querystring( array( 'action' => 'edit' ) ); ?>">
-        Update My Information
-    </a>
-</p>
+
 
 <?php
 
 echo $this->content;
+
+include( 'shortcode_forum.php' );
 
 $dshs_messages = array();
 

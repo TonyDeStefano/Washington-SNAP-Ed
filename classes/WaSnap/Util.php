@@ -5,13 +5,14 @@ namespace WaSnap;
 class Util {
 
     /**
-     * @param $string
+     * @param string|null $string
+     * @param mixed $default
      *
      * @return string
      */
-    public static function getString( $string )
+    public static function getString( $string, $default = '' )
     {
-        return ( $string === NULL ) ? '' : trim( $string );
+        return ( $string === NULL ) ? $default : trim( $string );
     }
 
     /**

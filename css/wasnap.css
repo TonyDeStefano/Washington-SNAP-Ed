@@ -58,3 +58,27 @@ button.btn {
 .wasnap-toggle-more {
     cursor: pointer;
 }
+
+.panel .panel-heading h3.panel-title {
+    margin-bottom: 5px !important;
+}
+
+.panel .panel-heading p {
+    margin-bottom: 5px !important;
+}
+
+.panel .panel-body p {
+    margin-bottom: 15px !important;
+}
+
+.wasnap-sticky td.title a {
+    font-weight: bold;
+}
+
+.wasnap-topics small {
+    font-size: 60%;
+}
+
+.img-responsive {
+    max-width: 100%;
+}

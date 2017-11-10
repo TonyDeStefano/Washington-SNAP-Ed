@@ -59,7 +59,7 @@ $action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
             }
             elseif ( $this->isForumPage() )
             {
-
+                include( 'shortcode_forum.php' );
             }
             else
             {

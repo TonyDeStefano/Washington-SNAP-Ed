@@ -5,8 +5,8 @@ namespace WaSnap;
 class Controller {
 	
 	const VERSION = '0.0.1';
-	const VERSION_JS = '0.0.3';
-	const VERSION_CSS = '0.0.3';
+	const VERSION_JS = '0.0.4';
+	const VERSION_CSS = '0.0.4';
 
 	private $errors;
 	private $content;
@@ -126,7 +126,39 @@ class Controller {
 
 	public function activate()
 	{
+        require_once( ABSPATH . '/wp-admin/includes/upgrade.php' );
 
+	    /** @var \wpdb $wpdb */
+	    global $wpdb;
+
+        $charset_collate = '';
+        if ( ! empty( $wpdb->charset ) )
+        {
+            $charset_collate .= " DEFAULT CHARACTER SET " . $wpdb->charset;
+        }
+        if ( ! empty( $wpdb->collate ) )
+        {
+            $charset_collate .= " COLLATE " . $wpdb->collate;
+        }
+
+        $table = $wpdb->prefix . ForumPost::TABLE_NAME;
+        $sql = "CREATE TABLE " . $table . " (
+					id INT(11) NOT NULL AUTO_INCREMENT,
+					parent_id INT(11) DEFAULT NULL,
+					child_count INT(11) DEFAULT 0,
+					provider_id INT(11) DEFAULT NULL,
+					title VARCHAR(255) DEFAULT NULL,
+					content TEXT DEFAULT NULL,
+					is_sticky TINYINT(4) DEFAULT 0,
+					is_archived TINYINT(4) DEFAULT 0,
+					created_at DATETIME DEFAULT NULL,
+					updated_at DATETIME DEFAULT NULL,
+					PRIMARY KEY  (id),
+					KEY parent_id (parent_id),
+					KEY provider_id (provider_id)
+				)";
+        $sql .= $charset_collate . ";";
+        dbDelta( $sql );
 	}
 
 	public function init()
@@ -164,6 +196,26 @@ class Controller {
             )
         );
     }
+
+    /**
+     * @param $key
+     * @param string $default
+     *
+     * @return string
+     */
+    public function param( $key, $default = '' )
+    {
+        if ( isset( $_POST[ $key ] ) )
+        {
+            return htmlspecialchars( $_POST[ $key ] );
+        }
+        elseif ( isset( $_GET[ $key ] ) )
+        {
+            return htmlspecialchars( $_GET[ $key ] );
+        }
+
+        return htmlspecialchars( $default );
+    }
 	
 	public function form_capture()
 	{
@@ -173,6 +225,62 @@ class Controller {
 			{
 				switch ( $_POST['wasnap_action'] )
                 {
+                    case 'answer':
+
+                        $content = trim( $_POST['content'] );
+                        $id = ( isset( $_POST['id'] ) ) ? $_POST['id'] : 0;
+                        $question = new Question( $id );
+
+                        if ( $question->getId() === NULL )
+                        {
+                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'view', 'id' => $question->getId() ), TRUE, $this->getForumPageUrl() ) );
+                            exit;
+                        }
+
+                        if ( strlen( $content ) == 0 )
+                        {
+                            $this->addError( 'Please enter a response' );
+                        }
+                        else
+                        {
+                            $answer = new Answer;
+                            $answer
+                                ->setParentId( $question->getId() )
+                                ->setContent( $content )
+                                ->setProviderId( $this->getProvider()->getId() )
+                                ->create();
+
+                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'view', 'id' => $answer->getParentId() ), TRUE, $this->getForumPageUrl() ) );
+                            exit;
+                        }
+
+                        break;
+
+                    case 'ask':
+
+                        $title = trim( $_POST['title'] );
+                        $content = trim( $_POST['content'] );
+
+                        if ( strlen( $title ) == 0 )
+                        {
+                            $this->addError( 'Please enter a question or topic' );
+                        }
+                        else
+                        {
+                            $question = new Question;
+                            $question
+                                ->setTitle( $title )
+                                ->setContent( $content )
+                                ->setProviderId( $this->getProvider()->getId() )
+                                ->setIsSticky( ( isset( $_POST['is_sticky'] ) ) )
+                                ->create();
+
+                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'view', 'id' => $question->getId() ), TRUE, $this->getForumPageUrl() ) );
+                            exit;
+                        }
+
+                        break;
+
                     case 'delete_approved_emails':
 
                         $approved_emails = $this->getApprovedEmails();
@@ -377,15 +485,27 @@ class Controller {
     /**
      * @param array $args
      * @param bool $remove_old_query_string
+     * @param null $url
      *
      * @return string
      */
-	public function add_to_querystring( array $args, $remove_old_query_string=FALSE )
-	{
-		$url = $_SERVER['REQUEST_URI'];
+	public function add_to_querystring( array $args, $remove_old_query_string = FALSE, $url = NULL )
+    {
+	    $keep_args = array();
+	    if ( $url !== NULL )
+        {
+            $parts = explode( '?', $url );
+            if ( count( $parts ) > 1 )
+            {
+                $keep_args = explode( '&', $parts[1] );
+            }
+        }
+
+		$url = ( $url === NULL ) ? $_SERVER['REQUEST_URI'] : $url;
 		$parts = explode( '?', $url );
 		$url = $parts[0];
 		$querystring = array();
+
 		if ( count( $parts ) > 1 )
 		{
 			$parts = explode( '&', $parts[1] );
@@ -393,7 +513,10 @@ class Controller {
 			{
 				if ( ! $remove_old_query_string || substr( $part, 0, 3 ) == 'id=' )
 				{
-					$querystring[] = $part;
+				    if ( ! in_array( $part, $querystring ) && ! in_array( $part, $keep_args ) )
+                    {
+                        $querystring[] = $part;
+                    }
 				}
 			}
 		}
@@ -402,6 +525,11 @@ class Controller {
 		{
 			$querystring[] = $key . '=' . $val;
 		}
+
+		foreach ( $keep_args as $arg )
+        {
+            $querystring[] = $arg;
+        }
 
 		return $url . ( ( count( $querystring ) > 0 ) ? '?' . implode( '&', $querystring ) : '' );
 	}
@@ -841,6 +969,19 @@ class Controller {
         {
             return $page;
         }
+    }
+
+    public function getForumPageUrl()
+    {
+        foreach ( $this->getProviderLinksPages() as $page )
+        {
+            if ( $page->getShortcodePage() == 'forum' )
+            {
+                return get_permalink( $page->getId() );
+            }
+        }
+
+        return $this->add_to_querystring( array( 'page' => 'forum' ) );
     }
 
     public function disable_richedit( $default )
