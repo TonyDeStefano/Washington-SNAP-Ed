@@ -12,6 +12,6 @@ class Answer extends ForumPost {
      */
     public static function getByParentId( $parent_id, $is_archived = FALSE )
     {
-        return self::getCollection( $parent_id, NULL, $is_archived );
+        return self::getCollection( $parent_id, NULL, $is_archived, NULL, NULL, 'ASC' );
     }
 }

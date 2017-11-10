@@ -42,6 +42,15 @@
             }
         });
 
+        $('.wasnap-delete-post').click(function(e){
+            e.preventDefault();
+            var href = $(this).prop('href');
+            var b = confirm('Are you sure you want to delete this item?');
+            if( b ){
+                window.location = href;
+            }
+        });
+
     });
 
 })(jQuery);

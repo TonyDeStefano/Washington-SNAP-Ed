@@ -605,6 +605,7 @@ class Controller {
         register_setting( 'wasnap_settings', 'wasnap_regions' );
         register_setting( 'wasnap_settings', 'wasnap_roles' );
         register_setting( 'wasnap_settings', 'wasnap_emails' );
+        register_setting( 'wasnap_settings', 'wasnap_resource_categories' );
 	}
 
     /**
@@ -615,6 +616,22 @@ class Controller {
 	public function getRegions( $as_list = FALSE )
     {
         $regions = explode( ',', get_option( 'wasnap_regions', '' ) );
+        foreach ( $regions as $index => $region )
+        {
+            $regions[ $index ] = trim( $region );
+        }
+
+        return ( $as_list ) ? implode( ', ', $regions ) : $regions;
+    }
+
+    /**
+     * @param bool $as_list
+     *
+     * @return array|string
+     */
+    public function getResourceCategories( $as_list = FALSE )
+    {
+        $regions = explode( ',', get_option( 'wasnap_resource_categories', '' ) );
         foreach ( $regions as $index => $region )
         {
             $regions[ $index ] = trim( $region );

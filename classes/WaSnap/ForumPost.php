@@ -393,10 +393,11 @@ class ForumPost {
      * @param null|bool $is_archived
      * @param null|int $page
      * @param null|int $page_size
+     * @param string $dir
      *
      * @return ForumPost[]|Answer[]|Question[]
      */
-    public static function getCollection( $parent_id = NULL, $provider_id = NULL, $is_archived = FALSE, $page = NULL, $page_size = NULL )
+    public static function getCollection( $parent_id = NULL, $provider_id = NULL, $is_archived = FALSE, $page = NULL, $page_size = NULL, $dir = 'DESC' )
     {
         /** @var \wpdb $wpdb */
         global $wpdb;
@@ -441,7 +442,7 @@ class ForumPost {
         $sql .= "
             ORDER BY
                 is_sticky DESC,
-                updated_at ASC";
+                updated_at " . $dir;
 
         if ( $page_size !== NULL || $page !== NULL )
         {

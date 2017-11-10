@@ -7,6 +7,15 @@ $actions = array( 'ask', 'answer', 'view' );
 $action = ( isset( $_GET['action'] ) && in_array( $_GET['action'], $actions ) ) ? $_GET['action'] : '';
 $providers = \WaSnap\Provider::getProviders();
 
+if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
+{
+    $forum_post = new \WaSnap\ForumPost( $_GET['delete'] );
+    if ( $forum_post->getId() !== NULL )
+    {
+        $forum_post->delete();
+    }
+}
+
 ?>
 
 <?php if ( $action == 'ask' ) { ?>
@@ -115,6 +124,13 @@ $providers = \WaSnap\Provider::getProviders();
             <?php if ( strlen( $question->getContent() ) > 0 ) { ?>
                 <div class="panel-body">
                     <?php echo $question->getContent(); ?>
+                    <?php if ( $this->getProvider()->isAdmin() ) { ?>
+                        <div class="text-right" style="margin: 5px 0 0;">
+                            <a href="#" class="btn btn-danger btn-xs wasnap-delete-post" data-id="<?php echo $question->getId(); ?>">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    <?php } ?>
                 </div>
             <?php } ?>
         </div>
@@ -155,6 +171,15 @@ $providers = \WaSnap\Provider::getProviders();
                                 on
                                 <?php echo $question->getCreatedAt( 'l, F j, Y' ); ?>
                             </em>
+                            <?php if ( $this->getProvider()->isAdmin() ) { ?>
+                                <div class="text-right" style="margin: 5px 0 0;">
+                                    <a
+                                            href="<?php echo $this->add_to_querystring( array( 'action' => 'view', 'id' => $question->getId(), 'delete' => $answer->getId() ), TRUE, $forum_url ); ?>"
+                                            class="btn btn-danger btn-xs wasnap-delete-post"
+                                            data-id="<?php echo $question->getId(); ?>"
+                                    ><i class="fa fa-times"></i></a>
+                                </div>
+                            <?php } ?>
                         </td>
                     </tr>
 

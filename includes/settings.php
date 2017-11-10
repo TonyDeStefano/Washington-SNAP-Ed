@@ -53,6 +53,19 @@
             </tr>
             <tr valign="top">
                 <th scope="row">
+                    <label for="wasnap_resource_categories">
+                        Resource Categories
+                    </label>
+                </th>
+                <td>
+                    <?php echo $this->getResourceCategories( TRUE ); ?>
+                </td>
+                <td>
+                    <textarea style="width:100%;" id="wasnap_resource_categories" name="wasnap_resource_categories"><?php echo $this->getResourceCategories( TRUE ); ?></textarea>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
                     <label for="wasnap_emails">
                         Notification Emails
                     </label>
@@ -79,6 +92,13 @@
 			Add these shortcodes to pages where you want this information available.
 		</strong>
 	</p>
+
+    <p>Resource Upload Form:</p>
+    <blockquote>
+
+        [wasnap form="resource"]
+
+    </blockquote>
 
     <p>Provider Dashboard:</p>
     <blockquote>
@@ -112,17 +132,6 @@
     <blockquote>
 
         [wasnap]
-        <br><br>
-        Type your page content here (it will only show up after the provider has logged in).
-        <br><br>
-        [/wasnap]
-
-    </blockquote>
-
-    <p>A password protected page just for providers that shows up on the menu:</p>
-    <blockquote>
-
-        [wasnap page="menu"]
         <br><br>
         Type your page content here (it will only show up after the provider has logged in).
         <br><br>
