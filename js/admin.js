@@ -26,6 +26,14 @@
             }
         });
 
+        $('.delete-wasnap-resource').click(function(e){
+            e.preventDefault();
+            var b = confirm('Are you sure you want to delete this resource?');
+            if ( b ){
+                window.location = 'admin.php?page=wasnap_resources&delete=' + $(this).data('id');
+            }
+        });
+
     });
 
 })(jQuery);

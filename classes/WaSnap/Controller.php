@@ -5,7 +5,7 @@ namespace WaSnap;
 class Controller {
 	
 	const VERSION = '0.0.1';
-	const VERSION_JS = '0.0.5';
+	const VERSION_JS = '0.0.6';
 	const VERSION_CSS = '0.0.7';
 
 	private $errors;
@@ -159,6 +159,19 @@ class Controller {
 				)";
         $sql .= $charset_collate . ";";
         dbDelta( $sql );
+
+        $table = $wpdb->prefix . ProviderResource::TABLE_NAME;
+        $sql = "CREATE TABLE " . $table . " (
+					id INT(11) NOT NULL AUTO_INCREMENT,
+					provider_id INT(11) DEFAULT NULL,
+					category VARCHAR(255) DEFAULT NULL,
+					location VARCHAR(255) DEFAULT NULL,
+					title VARCHAR(255) DEFAULT NULL,
+					created_at DATETIME DEFAULT NULL,
+					PRIMARY KEY  (id)
+				)";
+        $sql .= $charset_collate . ";";
+        dbDelta( $sql );
 	}
 
 	public function init()
@@ -216,6 +229,25 @@ class Controller {
 
         return htmlspecialchars( $default );
     }
+
+    public function download()
+    {
+        if ( isset( $_GET['wasnap_resource_id'] ) )
+        {
+            $resource = new ProviderResource( $_GET['wasnap_resource_id'] );
+
+            if ( $resource->getId() === NULL )
+            {
+                echo 'Resource could not be downloaded.';
+            }
+            else
+            {
+                $resource->download();
+            }
+
+            die();
+        }
+    }
 	
 	public function form_capture()
 	{
@@ -225,6 +257,33 @@ class Controller {
 			{
 				switch ( $_POST['wasnap_action'] )
                 {
+                    case 'upload':
+
+                        if ( ! isset( $_FILES['file']['name'] ) || $_FILES['file']['name'] == '' )
+                        {
+                            $this->addError( 'Please choose a file to upload' );
+                        }
+                        else
+                        {
+                            $resource = new ProviderResource;
+                            $resource->uploadFromFileArray( 'file', $this->getProvider()->getId(), $_POST['category'] );
+
+                            if ( $resource->getId() !== NULL )
+                            {
+                                $message = '
+                                    <p>Someone has just uploaded a provider resource.</p>
+                                    <p>Please <a href="' . get_admin_url() . '">log in</a> to view the resource.</p>';
+
+                                $headers = array( 'Content-Type: text/html; charset=UTF-8' );
+                                wp_mail( $this->getEmails(), 'New Provider Resource Upload', $message, $headers );
+
+                                header( 'Location:' . $this->add_to_querystring( array ( 'action' => 'uploaded' ), TRUE ) );
+                                exit;
+                            }
+                        }
+
+                        break;
+
                     case 'answer':
 
                         $content = trim( $_POST['content'] );
@@ -536,11 +595,16 @@ class Controller {
 	
 	public function short_code( $attributes, $content = NULL )
 	{
-        $this->attributes = shortcode_atts( array( 'page' => '' ), $attributes );
+        $this->attributes = shortcode_atts( array(
+            'page' => '',
+            'section' => ''
+        ), $attributes );
+
         if ( $this->getProvider() !== NULL )
         {
             $this->content = $this->getProvider()->fill( $content );
         }
+
         $this->shortcode_page = $this->getProviderPages()[ get_the_ID() ];
 
 		ob_start();
@@ -549,6 +613,21 @@ class Controller {
 		ob_end_clean();
 		return $output;
 	}
+
+    /**
+     * @param $attribute
+     *
+     * @return mixed|string
+     */
+	public function getAttribute( $attribute )
+    {
+        if ( isset( $this->attributes[ $attribute ] ) )
+        {
+            return $this->attributes[ $attribute ];
+        }
+
+        return '';
+    }
 
     /**
      * @param $page
@@ -598,6 +677,7 @@ class Controller {
 		add_submenu_page( 'wasnap', 'Settings', 'Settings', 'manage_options', 'wasnap' );
         add_submenu_page( 'wasnap', 'Providers', 'Providers', 'manage_options', 'wasnap_providers', array( $this, 'print_providers_page' ) );
         add_submenu_page( 'wasnap', 'Pre-Approved Providers', 'Pre-Approved Providers', 'manage_options', 'wasnap_approved', array( $this, 'print_approved_page' ) );
+        add_submenu_page( 'wasnap', 'Resources', 'Resources', 'manage_options', 'wasnap_resources', array( $this, 'print_resources_page' ) );
 	}
 	
 	public function register_settings()
@@ -732,6 +812,11 @@ class Controller {
     public function print_approved_page()
     {
         include( dirname( dirname( __DIR__ ) ) . '/includes/approved.php' );
+    }
+
+    public function print_resources_page()
+    {
+        include( dirname( dirname( __DIR__ ) ) . '/includes/resources.php' );
     }
 
 	public function create_nonce()

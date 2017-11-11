@@ -96,7 +96,7 @@
     <p>Resource Upload Form:</p>
     <blockquote>
 
-        [wasnap form="resource"]
+        [wasnap section="resource_upload"]
 
     </blockquote>
 

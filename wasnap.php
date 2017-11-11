@@ -33,6 +33,7 @@ require_once ( 'classes/WaSnap/Page.php' );
 require_once ( 'classes/WaSnap/ForumPost.php' );
 require_once ( 'classes/WaSnap/Question.php' );
 require_once ( 'classes/WaSnap/Answer.php' );
+require_once ( 'classes/WaSnap/ProviderResource.php' );
 
 $wasnap_controller = new \WaSnap\Controller;
 
@@ -70,6 +71,9 @@ add_action( 'wp_ajax_wasnap_dshs_message_delete', function() use ( $wasnap_contr
 /* admin stuff */
 if ( is_admin() )
 {
+    /* capture form post */
+    add_action( 'init', array( $wasnap_controller, 'download' ) );
+
 	/* Add main menu and sub-menus */
 	add_action( 'admin_menu', array( $wasnap_controller, 'admin_menus') );
 
