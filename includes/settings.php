@@ -100,6 +100,13 @@
 
     </blockquote>
 
+    <p>Provider Messages Section:</p>
+    <blockquote>
+
+        [wasnap section="messages"]
+
+    </blockquote>
+
     <p>Provider Dashboard:</p>
     <blockquote>
 

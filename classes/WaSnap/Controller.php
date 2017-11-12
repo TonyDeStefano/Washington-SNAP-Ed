@@ -6,7 +6,7 @@ class Controller {
 	
 	const VERSION = '0.0.1';
 	const VERSION_JS = '0.0.6';
-	const VERSION_CSS = '0.0.7';
+	const VERSION_CSS = '0.0.8';
 
 	private $errors;
 	private $content;
