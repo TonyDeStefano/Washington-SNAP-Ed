@@ -1,5 +1,10 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) )
+{
+    exit;
+}
+
 /** @var \WaSnap\Controller $this */
 
 $action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';

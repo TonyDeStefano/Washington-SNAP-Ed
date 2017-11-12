@@ -1,5 +1,10 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) )
+{
+    exit;
+}
+
 /** @var \WaSnap\Controller $this */
 
 $forum_url = $this->getForumPageUrl();
