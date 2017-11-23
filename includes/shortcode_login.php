@@ -45,7 +45,7 @@ $args = array (
 <?php wp_login_form( $args ); ?>
 
 <p>
-    <a href="/wp-login.php?action=lostpassword">Lost Password?</a>
+    <a href="<?php echo $this->add_to_querystring( array( 'action' => 'password' ) ); ?>">Lost Password?</a>
 </p>
 
 <div id="wasnap-entry-title">Log In or Register</div>

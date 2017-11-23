@@ -257,6 +257,40 @@ class Controller {
 			{
 				switch ( $_POST['wasnap_action'] )
                 {
+                    case 'password':
+
+                        $user = get_user_by( 'ID', $this->getProvider()->getId() );
+                        $password = $_POST['password'];
+                        $password1 = $_POST['password1'];
+                        $password2 = $_POST['password2'];
+
+                        if ( ! wp_check_password( $password, $user->data->user_pass, $user->ID ) )
+                        {
+                            $this->addError( 'The current password you entered is not correct.' );
+                        }
+                        elseif ( $password1 !== $password2 )
+                        {
+                            $this->addError( 'The new passwords you entered did not match.' );
+                        }
+                        elseif ( strlen( $password2 ) < 7 )
+                        {
+                            $this->addError( 'Your new password must be at least 7 characters long.' );
+                        }
+                        else
+                        {
+                            //reset_password( $user, $password1 );
+
+                            $data = array();
+                            $data['ID'] = $user->ID;
+                            $data['user_pass'] = $password1;
+                            wp_update_user( $data );
+
+                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'updated' ), TRUE ) );
+                            exit;
+                        }
+
+                        break;
+
                     case 'upload':
 
                         if ( ! isset( $_FILES['file']['name'] ) || $_FILES['file']['name'] == '' )

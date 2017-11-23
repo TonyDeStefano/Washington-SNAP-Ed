@@ -50,6 +50,10 @@ $action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
 
                     <?php include( 'shortcode_register.php' ); ?>
 
+                <?php } elseif ( $action == 'password' ) { ?>
+
+                    <?php include( 'shortcode_password.php' ); ?>
+
                 <?php } else { ?>
 
                     <?php include( 'shortcode_login.php' ); ?>
