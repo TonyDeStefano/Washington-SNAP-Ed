@@ -305,7 +305,7 @@ class Controller {
                             if ( $resource->getId() !== NULL )
                             {
                                 $message = '
-                                    <p>Someone has just uploaded a provider resource.</p>
+                                    <p>Someone has just uploaded a provider resource (' . $_POST['category'] . ').</p>
                                     <p>Please <a href="' . get_admin_url() . '">log in</a> to view the resource.</p>';
 
                                 Email::sendEmail( $this->getEmails(), 'New Provider Resource Upload', $message, TRUE );

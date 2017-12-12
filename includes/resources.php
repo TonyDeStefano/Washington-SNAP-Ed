@@ -30,6 +30,7 @@ $resources = \WaSnap\ProviderResource::getAllResources();
                 <td>Date</td>
                 <td>Provider</td>
                 <td>Resource</td>
+                <td>Category</td>
                 <td>Delete</td>
             </tr>
         </thead>
@@ -45,6 +46,9 @@ $resources = \WaSnap\ProviderResource::getAllResources();
                 </td>
                 <td>
                     <a target="_blank" href="admin.php?wasnap_resource_id=<?php echo $resource->getId(); ?>"><?php echo $resource->getTitle(); ?></a>
+                </td>
+                <td>
+                    <?php echo $resource->getCategory(); ?>
                 </td>
                 <td>
                     <a href="#" class="btn btn-danger delete-wasnap-resource" data-id="<?php echo $resource->getId(); ?>">

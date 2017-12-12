@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) )
 
     <?php } ?>
 
+    <h3>Upload New Resource</h3>
+
     <form method="post" enctype="multipart/form-data">
 
         <?php wp_nonce_field( 'wasnap_upload', 'wasnap_nonce' ); ?>
