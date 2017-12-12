@@ -618,8 +618,6 @@ class Provider {
 
     public function sendApproval( $password = NULL )
     {
-        echo "ggg";
-
         global $wasnap_controller;
 
         $this->setApprovalSentAt( time() );
@@ -640,9 +638,7 @@ class Provider {
 
         $message.= '</ul>';
 
-        $headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
-        wp_mail( $this->getEmail(), 'Provider Account Approval', $message, $headers );
+        Email::sendEmail( $this->getEmail(), 'Provider Account Approval', $message, TRUE );
     }
 
     /**

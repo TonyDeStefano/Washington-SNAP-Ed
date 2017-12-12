@@ -308,8 +308,7 @@ class Controller {
                                     <p>Someone has just uploaded a provider resource.</p>
                                     <p>Please <a href="' . get_admin_url() . '">log in</a> to view the resource.</p>';
 
-                                $headers = array( 'Content-Type: text/html; charset=UTF-8' );
-                                wp_mail( $this->getEmails(), 'New Provider Resource Upload', $message, $headers );
+                                Email::sendEmail( $this->getEmails(), 'New Provider Resource Upload', $message, TRUE );
 
                                 header( 'Location:' . $this->add_to_querystring( array ( 'action' => 'uploaded' ), TRUE ) );
                                 exit;
@@ -557,8 +556,7 @@ class Controller {
                                     <p><strong>' . $_POST['agency'] . '</strong> has just registered to be a provider on the website.</p>
                                     <p>Please <a href="' . get_admin_url() . '">log in</a> to view the application.</p>';
 
-                                $headers = array( 'Content-Type: text/html; charset=UTF-8' );
-                                wp_mail( $this->getEmails(), 'New Provider Registration', $message, $headers );
+                                Email::sendEmail( $this->getEmails(), 'New Provider Registration', $message, TRUE );
                             }
 
                             header( 'Location:' . $this->add_to_querystring( array( 'action' => 'registered' ), TRUE ) );
@@ -1206,5 +1204,19 @@ class Controller {
             }
         }
         wp_send_json( array( 'id' => $_POST['id'] ) );
+    }
+
+    public function wp_mail_content_type()
+    {
+        return 'text/html';
+    }
+
+    public function retrieve_password_message( $content, $key )
+    {
+        //$content = str_replace( "\r\n", '<br>', $content );
+        $content = str_replace( '<', '', $content );
+        $content = str_replace( '>', '', $content );
+
+        return Email::buildEmail( $content );
     }
 }

@@ -34,6 +34,7 @@ require_once ( 'classes/WaSnap/ForumPost.php' );
 require_once ( 'classes/WaSnap/Question.php' );
 require_once ( 'classes/WaSnap/Answer.php' );
 require_once ( 'classes/WaSnap/ProviderResource.php' );
+require_once ( 'classes/WaSnap/Email.php' );
 
 $wasnap_controller = new \WaSnap\Controller;
 
@@ -67,6 +68,9 @@ add_action( 'wp_ajax_wasnap_dshs_message_delete', function() use ( $wasnap_contr
 {
     $wasnap_controller->dshs_message_delete();
 } );
+
+add_filter ( 'wp_mail_content_type', array( $wasnap_controller, 'wp_mail_content_type' ) );
+add_filter ( 'retrieve_password_message', array( $wasnap_controller, 'retrieve_password_message' ) );
 
 /* admin stuff */
 if ( is_admin() )
