@@ -27,6 +27,7 @@ class Provider {
     private $approval_sent_at;
     private $is_provider = FALSE;
     private $is_dshs = FALSE;
+    private $tours_seen = array();
 
     /**
      * Provider constructor.
@@ -92,7 +93,8 @@ class Provider {
             ->setIsProfilePrivate( get_user_meta( $user->ID, 'is_profile_private', TRUE ) )
             ->setApprovedAt( get_user_meta( $user->ID, 'approved_at', TRUE ) )
             ->setApprovalSentAt( get_user_meta( $user->ID, 'approval_sent_at', TRUE ) )
-            ->setIsDshs( get_user_meta( $user->ID, 'is_dshs', TRUE ) );
+            ->setIsDshs( get_user_meta( $user->ID, 'is_dshs', TRUE ) )
+            ->setToursSeen( explode( ',', get_user_meta( $user->ID, 'tours_seen', TRUE ) ) );
 
         foreach ( $user->roles as $role )
         {
@@ -705,6 +707,45 @@ class Provider {
         }
 
         return $content;
+    }
+
+    /**
+     * @return array
+     */
+    public function getToursSeen()
+    {
+        return $this->tours_seen;
+    }
+
+    /**
+     * @param array $tours_seen
+     *
+     * @return Provider
+     */
+    public function setToursSeen( $tours_seen )
+    {
+        $this->tours_seen = $tours_seen;
+
+        return $this;
+    }
+
+    public function addToursSeen( $id )
+    {
+        if ( $this->id !== NULL )
+        {
+            $this->tours_seen[] = $id;
+            update_user_meta( $this->id, 'tours_seen', implode( ',', $this->tours_seen ) );
+        }
+    }
+
+    /**
+     * @param $id
+     *
+     * @return bool
+     */
+    public function hasSeenTour( $id )
+    {
+        return ( in_array( $id, $this->tours_seen ) );
     }
 
     /**

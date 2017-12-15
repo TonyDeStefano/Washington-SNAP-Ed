@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) )
 
     ?>
 
-        <h3<?php if ( ! $this->getProvider()->canAdminDshsMessages() ) { ?> style="display:none;"<?php } ?> class="dshs-messages">Messages from DSHS</h3>
+    <h3<?php if ( ! $this->getProvider()->canAdminDshsMessages() ) { ?> style="display:none;"<?php } ?> class="dshs-messages">Messages from DSHS</h3>
 
     <?php if ( $this->getProvider()->canAdminDshsMessages() ) { ?>
 
@@ -224,7 +224,7 @@ if ( ! defined( 'ABSPATH' ) )
 
     <?php if ( count( $snap_messages ) > 0 ) { ?>
 
-        <h3>Messages from SNAP-Ed Web Team</h3>
+        <h3 class="snap-messages">Messages from SNAP-Ed Web Team</h3>
 
         <div class="well">
             <?php foreach ( $snap_messages as $message ) { ?>

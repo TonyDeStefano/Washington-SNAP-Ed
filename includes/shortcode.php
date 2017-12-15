@@ -19,6 +19,10 @@ $action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
 
     <?php include( 'shortcode_messages.php' ); ?>
 
+<?php } elseif ( $this->getAttribute( 'section' ) == 'tour' ) { ?>
+
+    <?php include( 'shortcode_tour.php' ); ?>
+
 <?php } else { ?>
 
     <div id="wasnap">
@@ -42,7 +46,7 @@ $action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
 
         <?php } ?>
 
-        <?php if ( $this->shortcode_page->isProtected() ) { ?>
+        <?php if ( $this->shortcode_page !== NULL && $this->shortcode_page->isProtected() ) { ?>
 
             <?php if ( ! is_user_logged_in() ) { ?>
 

@@ -43,6 +43,8 @@ class Controller {
 
     public function add_post_types()
     {
+        /* SNAP-Ed Messages */
+
         $labels = array (
             'name' => __( 'SNAP-Ed Messages' ),
             'singular_name' => __( 'SNAP-Ed Message' ),
@@ -71,6 +73,8 @@ class Controller {
 
         register_post_type('wasnap_message', $args);
 
+        /* DSHS Messages */
+
         $labels = array (
             'name' => __( 'DSHS Messages' ),
             'singular_name' => __( 'DSHS Message' ),
@@ -98,6 +102,36 @@ class Controller {
         );
 
         register_post_type('wasnap_dshs_message', $args);
+
+        /* Hopscotch Tours */
+
+        $labels = array (
+            'name' => __( 'Hopscotch Tours' ),
+            'singular_name' => __( 'Hopscotch Tour' ),
+            'add_new_item' => __( 'Add New Hopscotch Tour' ),
+            'edit_item' => __( 'Edit Hopscotch Tour' ),
+            'new_item' => __( 'New Hopscotch Tour' ),
+            'view_item' => __( 'View Hopscotch Tour' ),
+            'search_items' => __( 'Search Hopscotch Tours' ),
+            'not_found' => __( 'No Hopscotch Tours found.' )
+        );
+
+        $args = array (
+            'labels' => $labels,
+            'hierarchical' => FALSE,
+            'description' => 'Hopscotch Tours',
+            'supports' => array('title', 'editor'),
+            'public' => TRUE,
+            'show_ui' => TRUE,
+            'show_in_menu' => 'wasnap',
+            'menu_position' => NULL,
+            'show_in_nav_menus' => TRUE,
+            'publicly_queryable' => TRUE,
+            'exclude_from_search' => FALSE,
+            'has_archive' => TRUE
+        );
+
+        register_post_type('wasnap_hopscotch', $args);
     }
 
     /**
@@ -181,6 +215,7 @@ class Controller {
 		wp_enqueue_style( 'wasnap-fa', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_JS, TRUE );
 		wp_enqueue_style( 'wasnap-bootstrap-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/bootstrap.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 		wp_enqueue_style( 'wasnap-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/wasnap.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
+        wp_enqueue_style( 'wasnap-hopscotch-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/hopscotch-0.2.6.min.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 
         wp_enqueue_script( 'wasnap-js', plugin_dir_url( dirname( __DIR__ )  ) . 'js/wasnap.js', array( 'jquery' ), ( WP_DEBUG ) ? time() : self::VERSION_JS, TRUE );
 		wp_localize_script(
@@ -190,6 +225,8 @@ class Controller {
                 'ajaxurl' => admin_url( 'admin-ajax.php' )
             )
         );
+        wp_enqueue_script( 'wasnap-hopscotch-js', plugin_dir_url( dirname( __DIR__ )  ) . 'js/hopscotch-0.2.6.min.js', array( 'jquery' ), ( WP_DEBUG ) ? time() : self::VERSION_JS, TRUE );
+
 
         if ( $this->provider === NULL )
         {
@@ -629,7 +666,8 @@ class Controller {
 	{
         $this->attributes = shortcode_atts( array(
             'page' => '',
-            'section' => ''
+            'section' => '',
+            'tour_id' => NULL
         ), $attributes );
 
         if ( $this->getProvider() !== NULL )
@@ -1141,7 +1179,7 @@ class Controller {
     {
         global $post;
 
-        if ( get_post_type( $post ) == 'wasnap_dshs_message' || get_post_type( $post ) == 'wasnap_message' )
+        if ( get_post_type( $post ) == 'wasnap_dshs_message' || get_post_type( $post ) == 'wasnap_message' || get_post_type( $post ) == 'wasnap_hopscotch' )
         {
             return FALSE;
         }
@@ -1218,5 +1256,22 @@ class Controller {
         $content = str_replace( '>', '', $content );
 
         return Email::buildEmail( $content );
+    }
+
+    public function set_hopscotch_custom_columns( $column_name )
+    {
+        global $post;
+
+        if ( $column_name == 'shortcode' )
+        {
+            echo '[wasnap section="tour" tour_id="' . $post->ID . '"]';
+        }
+    }
+
+    public function set_hopscotch_columns( $columns )
+    {
+        $columns['shortcode'] = 'Shortcode';
+
+        return $columns;
     }
 }

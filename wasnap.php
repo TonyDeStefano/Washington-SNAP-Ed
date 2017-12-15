@@ -100,4 +100,8 @@ if ( is_admin() )
     add_action( 'personal_options_update', array( $wasnap_controller, 'save_extra_profile_fields' ) );
     add_action( 'edit_user_profile_update', array( $wasnap_controller, 'save_extra_profile_fields' ) );
     add_action( 'user_register', array( $wasnap_controller, 'save_extra_profile_fields' ) );
+
+    /* extra hopscotch column */
+    add_action( 'manage_wasnap_hopscotch_posts_custom_column', array( $wasnap_controller, 'set_hopscotch_custom_columns' ) );
+    add_filter( 'manage_wasnap_hopscotch_posts_columns', array( $wasnap_controller, 'set_hopscotch_columns' ) );
 }

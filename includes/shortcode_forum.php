@@ -241,7 +241,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
     $questions = \WaSnap\Question::getForumQuestions( $page );
     ?>
 
-    <h3>Provider Forum</h3>
+    <h3 id="provider-forum">Provider Forum</h3>
 
     <div class="panel panel-default">
         <div class="panel-heading">
