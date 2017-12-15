@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) )
 
     <?php } ?>
 
-    <h3>Upload New Resource</h3>
+    <h3 id="upload-resource">Upload New Resource</h3>
 
     <form method="post" enctype="multipart/form-data">
 

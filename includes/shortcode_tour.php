@@ -53,15 +53,11 @@ $json = NULL;
 
     </script>
 
-    <?php if ( $this->getProvider()->isAdmin() ) { ?>
-
-        <p>
-            <a href="#" class="btn btn-default" id="hopscotch-preview-<?php echo $this->getAttribute( 'tour_id' ); ?>">
-                Preview Tour (Admin Only)
-            </a>
-        </p>
-
-    <?php } ?>
+    <p>
+        <a href="#" class="btn btn-default" id="hopscotch-preview-<?php echo $this->getAttribute( 'tour_id' ); ?>">
+            Tour This Page
+        </a>
+    </p>
 
     <?php $this->getProvider()->addToursSeen( $this->getAttribute( 'tour_id' ) ); ?>
 
