@@ -36,10 +36,10 @@ if ( ! defined( 'ABSPATH' ) )
                         Regions
                     </label>
                 </th>
-                <td>
+                <td valign="top">
                     <?php echo $this->getRegions( TRUE ); ?>
                 </td>
-                <td>
+                <td valign="top">
                     <textarea style="width:100%;" id="wasnap_regions" name="wasnap_regions"><?php echo $this->getRegions( TRUE ); ?></textarea>
                 </td>
             </tr>
@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) )
                         Manager [monitor budgets]
                     </small>
                 </th>
-                <td>
+                <td valign="top">
                     <ul>
                         <?php foreach ( $this->getRoles() as $role ) { ?>
                             <li>
@@ -69,8 +69,8 @@ if ( ! defined( 'ABSPATH' ) )
                         <?php } ?>
                     </ul>
                 </td>
-                <td>
-                    <textarea style="width:100%; height: 150px" id="wasnap_roles" name="wasnap_roles"><?php echo $this->getRoles( TRUE ); ?></textarea>
+                <td valign="top">
+                    <textarea style="width:100%; height: 200px" id="wasnap_roles" name="wasnap_roles"><?php echo $this->getRoles( TRUE ); ?></textarea>
                 </td>
             </tr>
             <tr valign="top">
@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) )
                         Indirect Education [walk by education]
                     </small>
                 </th>
-                <td>
+                <td valign="top">
                     <ul>
                         <?php foreach ( $this->getFocuses() as $focus ) { ?>
                             <li>
@@ -99,8 +99,68 @@ if ( ! defined( 'ABSPATH' ) )
                         <?php } ?>
                     </ul>
                 </td>
-                <td>
-                    <textarea style="width:100%; height: 150px" id="wasnap_focuses" name="wasnap_focuses"><?php echo $this->getFocuses( TRUE ); ?></textarea>
+                <td valign="top">
+                    <textarea style="width:100%; height: 200px" id="wasnap_focuses" name="wasnap_focuses"><?php echo $this->getFocuses( TRUE ); ?></textarea>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
+                    <label for="wasnap_audiences">
+                        Audiences Receiving Services
+                    </label><br>
+                    <small>
+                        Separate with ~ character<br>
+                        Put mouseovers in brackets<br>
+                        ex:<br>
+                        Youth, under 5 years<br>
+                        ~<br>
+                        Special Populations [ESL, refugee, disabled]
+                    </small>
+                </th>
+                <td valign="top">
+                    <ul>
+                        <?php foreach ( $this->getAudiences() as $audience ) { ?>
+                            <li>
+                                <strong><?php echo $audience['audience']; ?></strong>
+                                <?php if ( isset( $audience['mouseover'] ) ) { ?>
+                                    [<?php echo $audience['mouseover']; ?>]
+                                <?php } ?>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </td>
+                <td valign="top">
+                    <textarea style="width:100%; height: 200px" id="wasnap_audiences" name="wasnap_audiences"><?php echo $this->getAudiences( TRUE ); ?></textarea>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
+                    <label for="wasnap_sites">
+                        Sites Receiving Delivery of SNAP-Ed
+                    </label><br>
+                    <small>
+                        Separate with ~ character<br>
+                        Put mouseovers in brackets<br>
+                        ex:<br>
+                        Child Care<br>
+                        ~<br>
+                        Schools [Example]
+                    </small>
+                </th>
+                <td valign="top">
+                    <ul>
+                        <?php foreach ( $this->getSites() as $site ) { ?>
+                            <li>
+                                <strong><?php echo $site['site']; ?></strong>
+                                <?php if ( isset( $site['mouseover'] ) ) { ?>
+                                    [<?php echo $site['mouseover']; ?>]
+                                <?php } ?>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </td>
+                <td valign="top">
+                    <textarea style="width:100%; height: 200px" id="wasnap_sites" name="wasnap_sites"><?php echo $this->getSites( TRUE ); ?></textarea>
                 </td>
             </tr>
             <tr valign="top">
@@ -109,10 +169,10 @@ if ( ! defined( 'ABSPATH' ) )
                         Resource Categories
                     </label>
                 </th>
-                <td>
+                <td valign="top">
                     <?php echo $this->getResourceCategories( TRUE ); ?>
                 </td>
-                <td>
+                <td valign="top">
                     <textarea style="width:100%;" id="wasnap_resource_categories" name="wasnap_resource_categories"><?php echo $this->getResourceCategories( TRUE ); ?></textarea>
                 </td>
             </tr>
@@ -122,17 +182,17 @@ if ( ! defined( 'ABSPATH' ) )
                         Notification Emails
                     </label>
                 </th>
-                <td>
+                <td valign="top">
                     <?php echo $this->getEmails( TRUE ); ?>
                 </td>
-                <td>
+                <td valign="top">
                     <textarea style="width:100%;" id="wasnap_emails" name="wasnap_emails"><?php echo $this->getEmails( TRUE ); ?></textarea>
                 </td>
             </tr>
             <tr>
-                <td></td>
-                <td></td>
-                <td><?php submit_button(); ?></td>
+                <td valign="top"></td>
+                <td valign="top"></td>
+                <td valign="top"><?php submit_button(); ?></td>
             </tr>
 		</table>
 

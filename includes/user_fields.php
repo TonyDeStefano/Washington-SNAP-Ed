@@ -154,6 +154,14 @@ if ( $_POST )
             <td><input name="program_focus" id="program_focus" value="<?php echo esc_html( $provider->getProgramFocus() ); ?>" class="regular-text"></td>
         </tr>
         <tr>
+            <th><label for="audiences">SNAP-eligible Audience Receiving Services</label></th>
+            <td><input name="audiences" id="audiences" value="<?php echo esc_html( $provider->getAudiences() ); ?>" class="regular-text"></td>
+        </tr>
+        <tr>
+            <th><label for="sites">Sites Receiving Delivery of SNAP-Ed</label></th>
+            <td><input name="sites" id="sites" value="<?php echo esc_html( $provider->getSites() ); ?>" class="regular-text"></td>
+        </tr>
+        <tr>
             <th><label for="is_profile_private">Privacy</label></th>
             <td>
                 <select name="is_profile_private" id="is_profile_private" class="regular-text">

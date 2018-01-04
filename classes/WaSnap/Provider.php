@@ -20,6 +20,8 @@ class Provider {
     private $region;
     private $snap_ed_role;
     private $program_focus;
+    private $audiences;
+    private $sites;
     private $receives_notifications = FALSE;
     private $is_in_provider_directory = FALSE;
     private $is_profile_private = FALSE;
@@ -88,6 +90,8 @@ class Provider {
             ->setRegion( get_user_meta( $user->ID, 'region', TRUE ) )
             ->setSnapEdRole( get_user_meta( $user->ID, 'snap_ed_role', TRUE ) )
             ->setProgramFocus( get_user_meta( $user->ID, 'program_focus', TRUE ) )
+            ->setAudiences( get_user_meta( $user->ID, 'audiences', TRUE ) )
+            ->setSites( get_user_meta( $user->ID, 'sites', TRUE ) )
             ->setReceivesNotifications( get_user_meta( $user->ID, 'receives_notifications', TRUE ) )
             ->setIsInProviderDirectory( get_user_meta( $user->ID, 'is_in_provider_directory', TRUE ) )
             ->setIsProfilePrivate( get_user_meta( $user->ID, 'is_profile_private', TRUE ) )
@@ -439,6 +443,46 @@ class Provider {
     public function setProgramFocus( $program_focus )
     {
         $this->program_focus = $program_focus;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAudiences()
+    {
+        return Util::getString( $this->audiences );
+    }
+
+    /**
+     * @param mixed $audiences
+     *
+     * @return Provider
+     */
+    public function setAudiences( $audiences )
+    {
+        $this->audiences = $audiences;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSites()
+    {
+        return Util::getString( $this->sites );
+    }
+
+    /**
+     * @param mixed $sites
+     *
+     * @return Provider
+     */
+    public function setSites( $sites )
+    {
+        $this->sites = $sites;
 
         return $this;
     }

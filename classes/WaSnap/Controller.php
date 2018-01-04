@@ -496,6 +496,8 @@ class Controller {
                             update_user_meta( $this->getProvider()->getId(), 'region', $_POST['region'] );
                             update_user_meta( $this->getProvider()->getId(), 'snap_ed_role', $_POST['snap_ed_role'] );
                             update_user_meta( $this->getProvider()->getId(), 'program_focus', $_POST['program_focus'] );
+                            update_user_meta( $this->getProvider()->getId(), 'audiences', $_POST['audiences'] );
+                            update_user_meta( $this->getProvider()->getId(), 'sites', $_POST['sites'] );
                             update_user_meta( $this->getProvider()->getId(), 'is_profile_private', $_POST['is_profile_private'] );
                             update_user_meta( $this->getProvider()->getId(), 'is_in_provider_directory', $_POST['is_in_provider_directory'] );
                             update_user_meta( $this->getProvider()->getId(), 'is_dshs', $_POST['is_dshs'] );
@@ -578,12 +580,28 @@ class Controller {
                             update_user_meta( $user_id, 'phone', $_POST['phone'] );
                             update_user_meta( $user_id, 'region', $_POST['region'] );
                             update_user_meta( $user_id, 'snap_ed_role', $_POST['snap_ed_role'] );
+
                             $focuses = '';
                             if ( isset( $_POST['program_focus'] ) )
                             {
                                 $focuses = implode( ', ', $_POST['program_focus'] );
                             }
                             update_user_meta( $user_id, 'program_focus', $focuses );
+
+                            $audiences = '';
+                            if ( isset( $_POST['audiences'] ) )
+                            {
+                                $audiences = implode( ', ', $_POST['audiences'] );
+                            }
+                            update_user_meta( $user_id, 'audiences', $audiences );
+
+                            $sites = '';
+                            if ( isset( $_POST['sites'] ) )
+                            {
+                                $sites = implode( ', ', $_POST['sites'] );
+                            }
+                            update_user_meta( $user_id, 'sites', $sites );
+
                             update_user_meta( $user_id, 'is_profile_private', $_POST['is_profile_private'] );
                             update_user_meta( $user_id, 'is_in_provider_directory', $_POST['is_in_provider_directory'] );
 
@@ -770,6 +788,8 @@ class Controller {
         register_setting( 'wasnap_settings', 'wasnap_regions' );
         register_setting( 'wasnap_settings', 'wasnap_roles' );
         register_setting( 'wasnap_settings', 'wasnap_focuses' );
+        register_setting( 'wasnap_settings', 'wasnap_audiences' );
+        register_setting( 'wasnap_settings', 'wasnap_sites' );
         register_setting( 'wasnap_settings', 'wasnap_emails' );
         register_setting( 'wasnap_settings', 'wasnap_resource_categories' );
 	}
@@ -863,6 +883,72 @@ class Controller {
             $focus = str_replace( ']', '', $focus );
             $parts = explode( '[', $focus );
             $parsed[ $index ][ 'focus' ] = trim( $parts[0] );
+            if ( isset( $parts[1] ) )
+            {
+                $parsed[ $index ][ 'mouseover' ] = trim( $parts[1] );
+            }
+        }
+
+        return $parsed;
+    }
+
+    /**
+     * @param bool $raw
+     *
+     * @return array|mixed
+     */
+    public function getAudiences( $raw = FALSE )
+    {
+        $audiences = get_option( 'wasnap_audiences' , '' );
+
+        if ( $raw )
+        {
+            return $audiences;
+        }
+
+        $audiences = str_replace( "\r", '', $audiences );
+        $audiences = str_replace( "\n", '', $audiences );
+        $audiences = explode( '~', $audiences );
+        $parsed = array();
+
+        foreach ( $audiences as $index => $audience )
+        {
+            $audience = str_replace( ']', '', $audience );
+            $parts = explode( '[', $audience );
+            $parsed[ $index ][ 'audience' ] = trim( $parts[0] );
+            if ( isset( $parts[1] ) )
+            {
+                $parsed[ $index ][ 'mouseover' ] = trim( $parts[1] );
+            }
+        }
+
+        return $parsed;
+    }
+
+    /**
+     * @param bool $raw
+     *
+     * @return array|mixed
+     */
+    public function getSites( $raw = FALSE )
+    {
+        $sites = get_option( 'wasnap_sites' , '' );
+
+        if ( $raw )
+        {
+            return $sites;
+        }
+
+        $sites = str_replace( "\r", '', $sites );
+        $sites = str_replace( "\n", '', $sites );
+        $sites = explode( '~', $sites );
+        $parsed = array();
+
+        foreach ( $sites as $index => $site )
+        {
+            $site = str_replace( ']', '', $site );
+            $parts = explode( '[', $site );
+            $parsed[ $index ][ 'site' ] = trim( $parts[0] );
             if ( isset( $parts[1] ) )
             {
                 $parsed[ $index ][ 'mouseover' ] = trim( $parts[1] );
@@ -1051,6 +1137,16 @@ class Controller {
         if ( isset( $_POST['program_focus'] ) )
         {
             update_user_meta( $user_id, 'program_focus', $_POST['program_focus'] );
+        }
+
+        if ( isset( $_POST['audiences'] ) )
+        {
+            update_user_meta( $user_id, 'audiences', $_POST['audiences'] );
+        }
+
+        if ( isset( $_POST['sites'] ) )
+        {
+            update_user_meta( $user_id, 'sites', $_POST['sites'] );
         }
 
         if ( isset( $_POST['is_profile_private'] ) )

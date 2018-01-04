@@ -122,6 +122,14 @@ if ( isset( $_GET[ 'action' ] ) )
                                     <?php echo $provider->getProgramFocus(); ?>
                                 </li>
                                 <li>
+                                    <strong>Audiences:</strong>
+                                    <?php echo $provider->getAudiences(); ?>
+                                </li>
+                                <li>
+                                    <strong>Sites:</strong>
+                                    <?php echo $provider->getSites(); ?>
+                                </li>
+                                <li>
                                     <strong>DSHS Account:</strong>
                                     <?php if ( $provider->isDshs() ) { ?>
                                         <span class="label label-success">Yes</span>

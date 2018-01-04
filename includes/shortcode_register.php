@@ -199,6 +199,66 @@ if ( ! defined( 'ABSPATH' ) )
     </div>
 
     <div class="form-group">
+        <label for="audiences" class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+            <label>SNAP-eligible Audience Receiving Services (check all that apply)</label>
+            <?php
+
+            $audiences = array();
+            if ( isset( $_POST['audiences'] ) )
+            {
+                $audiences = $_POST['audiences'];
+            }
+
+            ?>
+            <?php foreach ( $this->getAudiences() as $audience ) { ?>
+                <p class="row">
+                <div class="col-sm-1">
+                    <input type="checkbox" name="audiences[]" value="<?php echo $audience['audience']; ?>"<?php if ( in_array( $audience['audience'], $audiences ) ) { ?> checked<?php } ?>>
+                </div>
+                <div class="col-sm-11">
+                    <?php echo $audience['audience']; ?>
+                    <?php if ( isset( $audience['mouseover'] ) ) { ?>
+                        <br>
+                        <small><?php echo $audience['mouseover']; ?></small>
+                    <?php } ?>
+                </div>
+                </p>
+            <?php } ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="sites" class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+            <label>SNAP-eligible Audience Receiving Services (check all that apply)</label>
+            <?php
+
+            $sites = array();
+            if ( isset( $_POST['sites'] ) )
+            {
+                $sites = $_POST['sites'];
+            }
+
+            ?>
+            <?php foreach ( $this->getSites() as $site ) { ?>
+                <p class="row">
+                <div class="col-sm-1">
+                    <input type="checkbox" name="sites[]" value="<?php echo $site['site']; ?>"<?php if ( in_array( $site['site'], $sites ) ) { ?> checked<?php } ?>>
+                </div>
+                <div class="col-sm-11">
+                    <?php echo $site['site']; ?>
+                    <?php if ( isset( $site['mouseover'] ) ) { ?>
+                        <br>
+                        <small><?php echo $site['mouseover']; ?></small>
+                    <?php } ?>
+                </div>
+                </p>
+            <?php } ?>
+        </div>
+    </div>
+
+    <div class="form-group">
         <label for="is_profile_private" class="col-sm-2 control-label">
             Privacy
         </label>

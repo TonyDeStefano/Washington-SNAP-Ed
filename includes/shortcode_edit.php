@@ -198,16 +198,16 @@ if ( ! defined( 'ABSPATH' ) )
                     <?php $temp = ( isset( $_POST['snap_ed_role'] ) ) ? $_POST['snap_ed_role'] : $this->getProvider()->getSnapEdRole(); ?>
                     <?php foreach ( $this->getRoles() as $role ) { ?>
                         <p class="row">
-                        <div class="col-sm-1">
-                            <input type="radio" name="snap_ed_role" value="<?php echo $role['role']; ?>"<?php if ( $temp == $role['role'] ) { ?> checked<?php } ?>>
-                        </div>
-                        <div class="col-sm-11">
-                            <?php echo $role['role']; ?>
-                            <?php if ( isset( $role['mouseover'] ) ) { ?>
-                                <br>
-                                <small><?php echo $role['mouseover']; ?></small>
-                            <?php } ?>
-                        </div>
+                            <div class="col-sm-1">
+                                <input type="radio" name="snap_ed_role" value="<?php echo $role['role']; ?>"<?php if ( $temp == $role['role'] ) { ?> checked<?php } ?>>
+                            </div>
+                            <div class="col-sm-11">
+                                <?php echo $role['role']; ?>
+                                <?php if ( isset( $role['mouseover'] ) ) { ?>
+                                    <br>
+                                    <small><?php echo $role['mouseover']; ?></small>
+                                <?php } ?>
+                            </div>
                         </p>
                     <?php } ?>
                 </div>
@@ -219,6 +219,24 @@ if ( ! defined( 'ABSPATH' ) )
                 </label>
                 <div class="col-sm-10">
                     <input class="form-control" type="text" id="program_focus" name="program_focus" value="<?php echo ( isset( $_POST['program_focus'] ) ) ? esc_html( $_POST['program_focus'] ) : esc_html( $this->getProvider()->getProgramFocus() ); ?>">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="audiences" class="col-sm-2 control-label">
+                    SNAP-eligible Audience Receiving Services
+                </label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" id="audiences" name="audiences" value="<?php echo ( isset( $_POST['audiences'] ) ) ? esc_html( $_POST['audiences'] ) : esc_html( $this->getProvider()->getAudiences() ); ?>">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="sites" class="col-sm-2 control-label">
+                    Sites Receiving Delivery of SNAP-Ed
+                </label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" id="sites" name="sites" value="<?php echo ( isset( $_POST['sites'] ) ) ? esc_html( $_POST['sites'] ) : esc_html( $this->getProvider()->getSites() ); ?>">
                 </div>
             </div>
 
