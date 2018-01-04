@@ -472,6 +472,11 @@ class Controller {
                             $this->addError( 'That email address is already in use' );
                         }
 
+                        elseif ( ! isset( $_POST['snap_ed_role'] ) )
+                        {
+                            $this->addError( 'Please choose a SNAP-Ed Role' );
+                        }
+
                         if ( count( $this->getErrors() ) == 0 )
                         {
                             $user_data = array (
@@ -545,6 +550,11 @@ class Controller {
                         elseif ( email_exists( $_POST['email'] ) )
                         {
                             $this->addError( 'That email address is already in use' );
+                        }
+
+                        elseif ( ! isset( $_POST['snap_ed_role'] ) )
+                        {
+                            $this->addError( 'Please choose a SNAP-Ed Role' );
                         }
 
                         if ( count( $this->getErrors() ) == 0 )
@@ -791,19 +801,36 @@ class Controller {
     }
 
     /**
-     * @param bool $as_list
+     * @param bool $raw
      *
-     * @return array|string
+     * @return array|mixed
      */
-    public function getRoles( $as_list = FALSE )
+    public function getRoles( $raw = FALSE )
     {
-        $roles = explode( ',', get_option( 'wasnap_roles' , '' ) );
-        foreach ( $roles as $index => $role )
+        $roles = get_option( 'wasnap_roles' , '' );
+
+        if ( $raw )
         {
-            $roles[ $index ] = trim( $role );
+            return $roles;
         }
 
-        return ( $as_list ) ? implode( ', ', $roles ) : $roles;
+        $roles = str_replace( "\r", '', $roles );
+        $roles = str_replace( "\n", '', $roles );
+        $roles = explode( '~', $roles );
+        $parsed = array();
+
+        foreach ( $roles as $index => $role )
+        {
+            $role = str_replace( ']', '', $role );
+            $parts = explode( '[', $role );
+            $parsed[ $index ][ 'role' ] = trim( $parts[0] );
+            if ( isset( $parts[1] ) )
+            {
+                $parsed[ $index ][ 'mouseover' ] = trim( $parts[1] );
+            }
+        }
+
+        return $parsed;
     }
 
     /**

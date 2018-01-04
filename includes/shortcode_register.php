@@ -144,21 +144,27 @@ if ( ! defined( 'ABSPATH' ) )
                 <?php } ?>
             </select>
         </div>
-        <label for="snap_ed_role" class="col-sm-2 control-label">
-            Role
-        </label>
-        <div class="col-sm-4">
-            <select name="snap_ed_role" id="snap_ed_role" class="form-control">
-                <option value="">
-                    Choose One ...
-                </option>
-                <?php $temp = ( isset( $_POST['snap_ed_role'] ) ) ? $_POST['snap_ed_role'] : ''; ?>
-                <?php foreach ( $this->getRoles() as $role ) { ?>
-                    <option value="<?php echo $role; ?>"<?php if ( $role == $temp) { ?> selected<?php } ?>>
-                        <?php echo $role; ?>
-                    </option>
-                <?php } ?>
-            </select>
+    </div>
+
+    <div class="form-group">
+        <label for="snap_ed_role" class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+            <label>Please check your primary role with SNAP-Ed</label>
+            <?php $temp = ( isset( $_POST['snap_ed_role'] ) ) ? $_POST['snap_ed_role'] : $this->getRoles()[0]['role']; ?>
+            <?php foreach ( $this->getRoles() as $role ) { ?>
+                <p class="row">
+                    <div class="col-sm-1">
+                        <input type="radio" name="snap_ed_role" value="<?php echo $role['role']; ?>"<?php if ( $temp == $role['role'] ) { ?> checked<?php } ?>>
+                    </div>
+                    <div class="col-sm-11">
+                        <?php echo $role['role']; ?>
+                        <?php if ( isset( $role['mouseover'] ) ) { ?>
+                            <br>
+                            <small><?php echo $role['mouseover']; ?></small>
+                        <?php } ?>
+                    </div>
+                </p>
+            <?php } ?>
         </div>
     </div>
 

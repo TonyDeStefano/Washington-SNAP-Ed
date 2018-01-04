@@ -142,8 +142,8 @@ if ( $_POST )
                 <select name="snap_ed_role" id="snap_ed_role" class="regular-text">
                     <option value="">N/A</option>
                     <?php foreach ( $wasnap_controller->getRoles() as $role ) { ?>
-                        <option value="<?php echo esc_html( $role ); ?>" <?php if ( $role == $provider->getSnapEdRole() ) { ?>selected<?php } ?>>
-                            <?php echo $role; ?>
+                        <option value="<?php echo esc_html( $role['role'] ); ?>" <?php if ( $role['role'] == $provider->getSnapEdRole() ) { ?>selected<?php } ?>>
+                            <?php echo $role['role']; ?>
                         </option>
                     <?php } ?>
                 </select>

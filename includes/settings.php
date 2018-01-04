@@ -47,13 +47,30 @@ if ( ! defined( 'ABSPATH' ) )
                 <th scope="row">
                     <label for="wasnap_roles">
                         Snap-Ed Roles
-                    </label>
+                    </label><br>
+                    <small>
+                        Separate with ~ character<br>
+                        Put mouseovers in brackets<br>
+                        ex:<br>
+                        Educator [teach clients directly]<br>
+                        ~<br>
+                        Manager [monitor budgets]
+                    </small>
                 </th>
                 <td>
-                    <?php echo $this->getRoles( TRUE ); ?>
+                    <ul>
+                        <?php foreach ( $this->getRoles() as $role ) { ?>
+                            <li>
+                                <strong><?php echo $role['role']; ?></strong>
+                                <?php if ( isset( $role['mouseover'] ) ) { ?>
+                                    [<?php echo $role['mouseover']; ?>]
+                                <?php } ?>
+                            </li>
+                        <?php } ?>
+                    </ul>
                 </td>
                 <td>
-                    <textarea style="width:100%;" id="wasnap_roles" name="wasnap_roles"><?php echo $this->getRoles( TRUE ); ?></textarea>
+                    <textarea style="width:100%; height: 150px" id="wasnap_roles" name="wasnap_roles"><?php echo $this->getRoles( TRUE ); ?></textarea>
                 </td>
             </tr>
             <tr valign="top">
