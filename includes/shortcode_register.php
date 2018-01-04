@@ -169,11 +169,32 @@ if ( ! defined( 'ABSPATH' ) )
     </div>
 
     <div class="form-group">
-        <label for="program_focus" class="col-sm-2 control-label">
-            Program Focus
-        </label>
+        <label for="program_focus" class="col-sm-2 control-label"></label>
         <div class="col-sm-10">
-            <input class="form-control" type="text" id="program_focus" name="program_focus" value="<?php echo ( isset( $_POST['program_focus'] ) ) ? esc_html( $_POST['program_focus'] ) : ''; ?>">
+            <label>SNAP-Ed Activities You Deliver (check all that apply)</label>
+            <?php
+
+            $focuses = array();
+            if ( isset( $_POST['program_focus'] ) )
+            {
+                $focuses = $_POST['program_focus'];
+            }
+
+            ?>
+            <?php foreach ( $this->getFocuses() as $focus ) { ?>
+                <p class="row">
+                    <div class="col-sm-1">
+                        <input type="checkbox" name="program_focus[]" value="<?php echo $focus['focus']; ?>"<?php if ( in_array( $focus['focus'], $focuses ) ) { ?> checked<?php } ?>>
+                    </div>
+                    <div class="col-sm-11">
+                        <?php echo $focus['focus']; ?>
+                        <?php if ( isset( $focus['mouseover'] ) ) { ?>
+                            <br>
+                            <small><?php echo $focus['mouseover']; ?></small>
+                        <?php } ?>
+                    </div>
+                </p>
+            <?php } ?>
         </div>
     </div>
 

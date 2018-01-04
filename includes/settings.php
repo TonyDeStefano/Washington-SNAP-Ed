@@ -75,6 +75,36 @@ if ( ! defined( 'ABSPATH' ) )
             </tr>
             <tr valign="top">
                 <th scope="row">
+                    <label for="wasnap_focuses">
+                        Program Focus
+                    </label><br>
+                    <small>
+                        Separate with ~ character<br>
+                        Put mouseovers in brackets<br>
+                        ex:<br>
+                        Direct Education [face to face]<br>
+                        ~<br>
+                        Indirect Education [walk by education]
+                    </small>
+                </th>
+                <td>
+                    <ul>
+                        <?php foreach ( $this->getFocuses() as $focus ) { ?>
+                            <li>
+                                <strong><?php echo $focus['focus']; ?></strong>
+                                <?php if ( isset( $focus['mouseover'] ) ) { ?>
+                                    [<?php echo $focus['mouseover']; ?>]
+                                <?php } ?>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </td>
+                <td>
+                    <textarea style="width:100%; height: 150px" id="wasnap_focuses" name="wasnap_focuses"><?php echo $this->getFocuses( TRUE ); ?></textarea>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row">
                     <label for="wasnap_resource_categories">
                         Resource Categories
                     </label>

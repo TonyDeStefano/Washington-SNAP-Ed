@@ -578,7 +578,12 @@ class Controller {
                             update_user_meta( $user_id, 'phone', $_POST['phone'] );
                             update_user_meta( $user_id, 'region', $_POST['region'] );
                             update_user_meta( $user_id, 'snap_ed_role', $_POST['snap_ed_role'] );
-                            update_user_meta( $user_id, 'program_focus', $_POST['program_focus'] );
+                            $focuses = '';
+                            if ( isset( $_POST['program_focus'] ) )
+                            {
+                                $focuses = implode( ', ', $_POST['program_focus'] );
+                            }
+                            update_user_meta( $user_id, 'program_focus', $focuses );
                             update_user_meta( $user_id, 'is_profile_private', $_POST['is_profile_private'] );
                             update_user_meta( $user_id, 'is_in_provider_directory', $_POST['is_in_provider_directory'] );
 
@@ -764,6 +769,7 @@ class Controller {
 	{
         register_setting( 'wasnap_settings', 'wasnap_regions' );
         register_setting( 'wasnap_settings', 'wasnap_roles' );
+        register_setting( 'wasnap_settings', 'wasnap_focuses' );
         register_setting( 'wasnap_settings', 'wasnap_emails' );
         register_setting( 'wasnap_settings', 'wasnap_resource_categories' );
 	}
@@ -824,6 +830,39 @@ class Controller {
             $role = str_replace( ']', '', $role );
             $parts = explode( '[', $role );
             $parsed[ $index ][ 'role' ] = trim( $parts[0] );
+            if ( isset( $parts[1] ) )
+            {
+                $parsed[ $index ][ 'mouseover' ] = trim( $parts[1] );
+            }
+        }
+
+        return $parsed;
+    }
+
+    /**
+     * @param bool $raw
+     *
+     * @return array|mixed
+     */
+    public function getFocuses( $raw = FALSE )
+    {
+        $focuses = get_option( 'wasnap_focuses' , '' );
+
+        if ( $raw )
+        {
+            return $focuses;
+        }
+
+        $focuses = str_replace( "\r", '', $focuses );
+        $focuses = str_replace( "\n", '', $focuses );
+        $focuses = explode( '~', $focuses );
+        $parsed = array();
+
+        foreach ( $focuses as $index => $focus )
+        {
+            $focus = str_replace( ']', '', $focus );
+            $parts = explode( '[', $focus );
+            $parsed[ $index ][ 'focus' ] = trim( $parts[0] );
             if ( isset( $parts[1] ) )
             {
                 $parsed[ $index ][ 'mouseover' ] = trim( $parts[1] );
