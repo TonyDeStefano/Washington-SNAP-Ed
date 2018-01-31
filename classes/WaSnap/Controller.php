@@ -5,7 +5,7 @@ namespace WaSnap;
 class Controller {
 	
 	const VERSION = '0.0.1';
-	const VERSION_JS = '0.0.6';
+	const VERSION_JS = '0.0.8';
 	const VERSION_CSS = '0.0.8';
 
 	private $errors;
@@ -700,6 +700,7 @@ class Controller {
         $this->attributes = shortcode_atts( array(
             'page' => '',
             'section' => '',
+            'login' => '',
             'tour_id' => NULL
         ), $attributes );
 
@@ -717,6 +718,11 @@ class Controller {
 		return $output;
 	}
 
+	public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
     /**
      * @param $attribute
      *
@@ -730,6 +736,14 @@ class Controller {
         }
 
         return '';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLoginHidden()
+    {
+        return ( $this->getAttribute( 'login' ) == 'hidden' && ! is_user_logged_in() );
     }
 
     /**
@@ -1435,5 +1449,16 @@ class Controller {
         $columns['shortcode'] = 'Shortcode';
 
         return $columns;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
+    public function formatLinks( $content )
+    {
+        $xp = '@(http(s)?)?(://)?(([a-zA-Z])([-\w]+\.)+([^\s\.]+[^\s]*)+[^,.\s])@';
+        return preg_replace( $xp, '<a href="http$2://$4" title="$0">$0</a>', $content );
     }
 }

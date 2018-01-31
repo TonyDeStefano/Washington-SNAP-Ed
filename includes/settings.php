@@ -247,6 +247,17 @@ if ( ! defined( 'ABSPATH' ) )
 
     </blockquote>
 
+    <p>Hide the login box:</p>
+    <blockquote>
+
+        [wasnap login="hidden"]
+        <br><br>
+        Your members only content.
+        <br><br>
+        [/wasnap]
+
+    </blockquote>
+
     <p>A password protected page just for providers:</p>
     <blockquote>
 

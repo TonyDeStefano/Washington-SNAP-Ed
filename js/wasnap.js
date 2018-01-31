@@ -51,6 +51,9 @@
             }
         });
 
+        $('.wasnap-login-hidden').each(function(){
+            $(this).closest('.panel-widget-style').hide();
+        });
     });
 
 })(jQuery);

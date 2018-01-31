@@ -128,7 +128,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
             </div>
             <?php if ( strlen( $question->getContent() ) > 0 ) { ?>
                 <div class="panel-body">
-                    <?php echo $question->getContent(); ?>
+                    <?php echo $this->formatLinks( $question->getContent() ); ?>
                     <?php if ( $this->getProvider()->isAdmin() ) { ?>
                         <div class="text-right" style="margin: 5px 0 0;">
                             <a
@@ -155,7 +155,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
                             </p>
                         </td>
                         <td style="width:80%">
-                            <p style="margin-bottom:5px;"><?php echo $answer->getContent(); ?></p>
+                            <p style="margin-bottom:5px;"><?php echo $this->formatLinks( $answer->getContent() ); ?></p>
                             <em style="font-size:60%;">
                                 <?php
 
