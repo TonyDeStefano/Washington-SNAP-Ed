@@ -51,9 +51,18 @@
             }
         });
 
+        var hidden_count = 0;
+
         $('.wasnap-login-hidden').each(function(){
             $(this).closest('.panel-widget-style').hide();
+            hidden_count++;
         });
+
+        if (hidden_count > 0){
+            $('.wasnap-hidden').each(function(){
+                $(this).hide();
+            });
+        }
     });
 
 })(jQuery);
