@@ -13,7 +13,19 @@ if ( isset( $_GET['delete'] ) )
     $resource->delete();
 }
 
-$providers = \WaSnap\Provider::getProviders();
+$providers = [];
+
+$users = get_users();
+
+foreach ( $users as $user )
+{
+    $providers[ $user->ID ] = [
+        'first' => $user->user_firstname,
+        'last' => $user->user_lastname,
+        'agency' => get_user_meta( $user->ID, 'agency', TRUE )
+    ];
+}
+
 $resources = \WaSnap\ProviderResource::getAllResources();
 
 ?>
@@ -28,7 +40,7 @@ $resources = \WaSnap\ProviderResource::getAllResources();
         <thead>
             <tr>
                 <td>Date</td>
-                <td>Provider</td>
+                <td>Provider/Administrator</td>
                 <td>Resource</td>
                 <td>Category</td>
                 <td>Delete</td>
@@ -39,7 +51,16 @@ $resources = \WaSnap\ProviderResource::getAllResources();
                 <td><?php echo $resource->getCreatedAt( 'n/j/Y' ); ?></td>
                 <td>
                     <?php if ( isset( $providers[ $resource->getProviderId() ] ) ) { ?>
-                        <?php $providers[ $resource->getProviderId() ]->getAgency(); ?>
+                        <?php
+
+                        echo $providers[ $resource->getProviderId() ]['first'] . ' ' . $providers[ $resource->getProviderId() ]['last'];
+
+                        if ( strlen( $providers[ $resource->getProviderId() ]['agency'] ) > 0 )
+                        {
+                            echo ' (' . $providers[ $resource->getProviderId() ]['agency'] . ')';
+                        }
+
+                        ?>
                     <?php } else { ?>
                         Unknown
                     <?php } ?>
