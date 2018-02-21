@@ -192,35 +192,35 @@ if ( ! defined( 'ABSPATH' ) )
 
         </script>
 
-        <div id="dshs-messages">
+    <?php } ?>
 
-            <?php foreach ( $dshs_messages as $message ) { ?>
-                <div class="well dshs-message" id="dshs-message-<?php echo $message['id']; ?>" data-id="<?php echo $message['id']; ?>">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <small>
-                                <?php echo $message['date']; ?>
-                                <?php if ( $this->getProvider()->canAdminDshsMessages() ) { ?>
-                                    (
-                                    <a href="#" class="dshs-button-edit">
-                                        Edit
-                                    </a>
-                                    )
-                                <?php } ?>
-                            </small>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="content col-sm-12">
-                            <?php echo $message['content']; ?>
-                        </div>
+    <div id="dshs-messages">
+
+        <?php foreach ( $dshs_messages as $message ) { ?>
+            <div class="well dshs-message" id="dshs-message-<?php echo $message['id']; ?>" data-id="<?php echo $message['id']; ?>">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <small>
+                            <?php echo $message['date']; ?>
+                            <?php if ( $this->getProvider()->canAdminDshsMessages() ) { ?>
+                                (
+                                <a href="#" class="dshs-button-edit">
+                                    Edit
+                                </a>
+                                )
+                            <?php } ?>
+                        </small>
                     </div>
                 </div>
-            <?php } ?>
+                <div class="row">
+                    <div class="content col-sm-12">
+                        <?php echo $message['content']; ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
 
-        </div>
-
-    <?php } ?>
+    </div>
 
     <?php if ( count( $snap_messages ) > 0 ) { ?>
 
