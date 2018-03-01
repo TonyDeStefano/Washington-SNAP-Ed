@@ -5,7 +5,7 @@ namespace WaSnap;
 class Controller {
 	
 	const VERSION = '0.0.1';
-	const VERSION_JS = '0.0.10';
+	const VERSION_JS = '0.0.14';
 	const VERSION_CSS = '0.0.8';
 
 	private $errors;

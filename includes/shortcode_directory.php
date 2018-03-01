@@ -11,6 +11,16 @@ echo $this->content;
 
 $providers = \WaSnap\Provider::getDirectoryProviders();
 
+$agencies = array();
+foreach ( $providers as $provider )
+{
+    if ( ! in_array( $provider->getAgency(), $agencies ) )
+    {
+        $agencies[] = ucfirst( $provider->getAgency() );
+    }
+}
+natsort( $agencies );
+
 ?>
 
 <?php if ( count( $providers ) == 0 ) { ?>
@@ -24,8 +34,11 @@ $providers = \WaSnap\Provider::getDirectoryProviders();
 
     <form class="form-horizontal">
         <div class="form-group">
-            <label for="wasnap-search" class="col-sm-2  control-label" style="color:#76bf28; padding-top:25px; margin-right: -10px;">Search</label><div class="col-sm-8">
-                <input class="form-control" id="wasnap-search" style="float: left;">
+            <label for="wasnap-search" class="col-sm-2  control-label" style="color:#76bf28;">
+                Search
+            </label>
+            <div class="col-sm-8">
+                <input class="form-control" id="wasnap-search">
             </div>
             <div class="col-sm-2">
                 <a href="#" class="btn btn-danger" id="wasnap-search-clear">
@@ -33,31 +46,54 @@ $providers = \WaSnap\Provider::getDirectoryProviders();
                 </a>
             </div>
         </div>
+        <div class="form-group">
+            <label for="wasnap-region" class="col-sm-2  control-label" style="color:#76bf28;">
+                Region
+            </label>
+            <div class="col-sm-8">
+                <select class="form-control" id="wasnap-region">
+                    <option value="">All Regions</option>
+                    <?php foreach ( $this->getRegions() as $region ) { ?>
+                        <option value="<?php echo $region; ?>">
+                            <?php echo $region; ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="wasnap-agency" class="col-sm-2  control-label" style="color:#76bf28;">
+                Agency
+            </label>
+            <div class="col-sm-8">
+                <select class="form-control" id="wasnap-agency">
+                    <option value="">All Agencies</option>
+                    <?php foreach ( $agencies as $agency ) { ?>
+                        <option value="<?php echo $agency; ?>">
+                            <?php echo $agency; ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
     </form>
 
 <?php } ?>
 
-<?php foreach ( $providers as $provider ) { 
+<?php foreach ( $providers as $provider ) { ?>
 
-
-
-?>
-
-    <div class="well wasnap-provider" style="background-color: #fff; ">
+    <div
+        class="well wasnap-provider"
+        data-region="<?php echo $provider->getRegion(); ?>"
+        data-agency="<?php echo ucfirst( $provider->getAgency() ); ?>"
+        style="background-color: #fff;">
         <div class="row wasnap-toggle-more" data-state="closed">
             <div class="col-md-11">
-               
-				<h5 style="color:#147891"><i class="fa fa-address-book-o"></i> <?php echo $provider->getLastName(); ?>, <?php echo $provider->getFirstName(); ?></h5>
-						
-						
-						
-						
-
+				<h5 style="color:#147891">
+                    <i class="fa fa-address-book-o"></i>
+                    <?php echo $provider->getLastName(); ?>, <?php echo $provider->getFirstName(); ?>
+                </h5>
 			</div>
-            
-			
-			
-			
 			<div class="col-md-1">
                 <i class="fa fa-chevron-down"></i>
             </div>

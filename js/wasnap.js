@@ -3,27 +3,28 @@
     $(function(){
 
         var title = $('#wasnap-entry-title');
+        var body = $('body');
 
         if(title.length){
             $('h1.entry-title').text(title.text())
         }
 
-        $('body').on('change, keyup', '#wasnap-search', function(){
-            var search = $(this).val().trim().toUpperCase();
-            $('.wasnap-provider').each(function(){
-                $(this).hide();
-            });
-            $('.wasnap-search').each(function(){
-                var text = $(this).text().trim().toUpperCase();
-                if ( text.includes(search) ) {
-                    $(this).closest('.wasnap-provider').show();
-                }
-            });
+        body.on('change, keyup', '#wasnap-search', function(){
+            doProviderSearch();
+        });
+
+        body.on('change', '#wasnap-region', function(){
+            doProviderSearch();
+        });
+
+        body.on('change', '#wasnap-agency', function(){
+            doProviderSearch();
         });
 
         $('#wasnap-search-clear').click(function(e){
             e.preventDefault();
             $('#wasnap-search').val('');
+            $('#wasnap-region').val('');
             $('.wasnap-provider').each(function(){
                 $(this).show();
             });
@@ -64,5 +65,30 @@
             });
         }
     });
+
+    function doProviderSearch(){
+
+        var search = $('#wasnap-search').val().trim().toUpperCase();
+        var region = $('#wasnap-region').val();
+        var agency = $('#wasnap-agency').val();
+
+        $('.wasnap-provider').each(function(){
+            $(this).hide();
+        });
+
+        $('.wasnap-search').each(function(){
+
+            var provider = $(this).closest('.wasnap-provider');
+            var text = $(this).text().trim().toUpperCase();
+
+            if (
+                text.includes(search)
+                && ( region.length === 0 || provider.data('region') === region )
+                && ( agency.length === 0 || provider.data('agency') === agency )
+            ) {
+                provider.show();
+            }
+        });
+    }
 
 })(jQuery);
