@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) )
 
 <?php if ( $action == 'updated' ) { ?>
 
-    <div class="alert alert-success">
+    <div class="alert alert-success" style="color:#76bf28;">
         Your information has been updated!
     </div>
 
@@ -38,25 +38,24 @@ if ( ! defined( 'ABSPATH' ) )
             <input type="hidden" name="wasnap_action" value="password">
 
             <div class="form-group">
-                <label for="password">Current Password</label>
+                <label for="password" style="color:#76bf28;">Current Password</label>
                 <input class="form-control" id="password" name="password" type="password">
             </div>
 
             <div class="form-group">
-                <label for="password1">New Password</label>
+                <label for="password1" style="color:#76bf28;">New Password</label>
                 <input class="form-control" id="password1" name="password1" type="password">
             </div>
 
             <div class="form-group">
-                <label for="password2">Re-Enter New Password</label>
+                <label for="password2" style="color:#76bf28;">Re-Enter New Password</label>
                 <input class="form-control" id="password2" name="password2" type="password">
             </div>
 
             <p>
-                <button class="btn btn-default">
+                <button class="btn btn-default" style="background-color:#147891; color:#fff;text-align: center;">
                     Change Password
-                </button>
-                <a href="<?php echo $this->getDashboardUrl(); ?>" class="btn btn-danger">
+                </button>  <a href="<?php echo $this->getDashboardUrl(); ?>" class="btn btn-danger">
                     Cancel
                 </a>
             </p>
@@ -68,9 +67,7 @@ if ( ! defined( 'ABSPATH' ) )
     <?php } else { ?>
 
         <p>
-            Update your account information below.<br>
-            If you wish to update your password, please
-            <a href="<?php echo $this->add_to_querystring( array( 'password' => 'reset' ) ); ?>">click here</a>.
+			Update your account information below. If you wish to update your password, please <a href="<?php echo $this->add_to_querystring( array( 'password' => 'reset' ) ); ?>"><strong><em>click here</em></strong></a>.
         </p>
 
         <form method="post" class="form-horizontal">
@@ -78,45 +75,40 @@ if ( ! defined( 'ABSPATH' ) )
             <?php wp_nonce_field( 'wasnap_edit', 'wasnap_nonce' ); ?>
             <input type="hidden" name="wasnap_action" value="edit">
 
-            <div class="form-group">
-                <label for="email" class="col-sm-2 control-label">
-                    Email
-                    <strong>*</strong>
-                </label>
+            <div class="form-group required" >
+                <label for="email" class="col-sm-2 control-label" style="color:#76bf28;">
+                    Email *</label>
                 <div class="col-sm-10">
                     <input class="form-control" type="email" id="email" name="email" value="<?php echo ( isset( $_POST['email'] ) ) ? esc_html( $_POST['email'] ) : esc_html( $this->getProvider()->getEmail() ); ?>">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="agency" class="col-sm-2 control-label">
-                    Agency
-                    <strong>*</strong>
-                </label>
+                <label for="agency" class="col-sm-2 control-label" style="color:#76bf28;">
+                    Agency*</label>
+                
                 <div class="col-sm-10">
                     <input class="form-control" type="text" id="agency" name="agency" value="<?php echo ( isset( $_POST['agency'] ) ) ? esc_html( $_POST['agency'] ) : esc_html( $this->getProvider()->getAgency() ); ?>">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="fname" class="col-sm-2 control-label">
-                    First Name
-                    <strong>*</strong>
-                </label>
+                <label for="fname" class="col-sm-2 control-label" style="color:#76bf28;">First Name *</label>
                 <div class="col-sm-4">
                     <input class="form-control" type="text" id="fname" name="fname" value="<?php echo ( isset( $_POST['fname'] ) ) ? esc_html( $_POST['fname'] ) : esc_html( $this->getProvider()->getFirstName() ); ?>">
                 </div>
-                <label for="lname" class="col-sm-2 control-label">
-                    Last Name
-                    <strong>*</strong>
-                </label>
+				
+				<label for="lname" class="col-sm-2 control-label" style="color:#76bf28;">Last Name *</label>
                 <div class="col-sm-4">
                     <input class="form-control" type="text" id="lname" name="lname" value="<?php echo ( isset( $_POST['lname'] ) ) ? esc_html( $_POST['lname'] ) : esc_html( $this->getProvider()->getLastName() ); ?>">
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="address" class="col-sm-2 control-label">
+            
+			
+			
+			<div class="form-group">
+                <label for="address" class="col-sm-2 control-label" style="color:#76bf28;">
                     Address
                 </label>
                 <div class="col-sm-10">
@@ -125,7 +117,7 @@ if ( ! defined( 'ABSPATH' ) )
             </div>
 
             <div class="form-group">
-                <label for="address2" class="col-sm-2 control-label">
+                <label for="address2" class="col-sm-2 control-label" style="color:#76bf28;">
                     Address 2
                 </label>
                 <div class="col-sm-10">
@@ -134,7 +126,7 @@ if ( ! defined( 'ABSPATH' ) )
             </div>
 
             <div class="form-group">
-                <label for="city" class="col-sm-2 control-label">
+                <label for="city" class="col-sm-2 control-label" style="color:#76bf28;">
                     City
                 </label>
                 <div class="col-sm-10">
@@ -143,13 +135,13 @@ if ( ! defined( 'ABSPATH' ) )
             </div>
 
             <div class="form-group">
-                <label for="state" class="col-sm-2 control-label">
+                <label for="state" class="col-sm-2 control-label" style="color:#76bf28;">
                     State
                 </label>
                 <div class="col-sm-4">
                     <input class="form-control" type="text" id="state" name="state" value="<?php echo ( isset( $_POST['state'] ) ) ? esc_html( $_POST['state'] ) : esc_html( $this->getProvider()->getState() ); ?>">
                 </div>
-                <label for="zip" class="col-sm-2 control-label">
+                <label for="zip" class="col-sm-2 control-label" style="color:#76bf28;">
                     Zip Code
                 </label>
                 <div class="col-sm-4">
@@ -158,13 +150,13 @@ if ( ! defined( 'ABSPATH' ) )
             </div>
 
             <div class="form-group">
-                <label for="phone" class="col-sm-2 control-label">
+                <label for="phone" class="col-sm-2 control-label" style="color:#76bf28;">
                     Phone
                 </label>
                 <div class="col-sm-4">
                     <input class="form-control" type="text" id="phone" name="phone" value="<?php echo ( isset( $_POST['phone'] ) ) ? esc_html( $_POST['phone'] ) : esc_html( $this->getProvider()->getPhone() ); ?>">
                 </div>
-                <label for="url" class="col-sm-2 control-label">
+                <label for="url" class="col-sm-2 control-label" style="color:#76bf28;">
                     Website
                 </label>
                 <div class="col-sm-4">
@@ -173,7 +165,7 @@ if ( ! defined( 'ABSPATH' ) )
             </div>
 
             <div class="form-group">
-                <label for="region" class="col-sm-2 control-label">
+                <label for="region" class="col-sm-2 control-label" style="color:#76bf28;">
                     Region
                 </label>
                 <div class="col-sm-4">
@@ -190,11 +182,11 @@ if ( ! defined( 'ABSPATH' ) )
                     </select>
                 </div>
             </div>
-
+<hr>
             <div class="form-group">
                 <label for="snap_ed_role" class="col-sm-2 control-label"></label>
                 <div class="col-sm-10">
-                    <label>Please check your primary role with SNAP-Ed</label>
+                    <label style="color:#76bf28;">Please check your primary role with SNAP-Ed</label>
                     <?php $temp = ( isset( $_POST['snap_ed_role'] ) ) ? $_POST['snap_ed_role'] : $this->getProvider()->getSnapEdRole(); ?>
                     <?php foreach ( $this->getRoles() as $role ) { ?>
                         <p class="row">
@@ -214,34 +206,33 @@ if ( ! defined( 'ABSPATH' ) )
             </div>
 
             <div class="form-group">
-                <label for="program_focus" class="col-sm-2 control-label">
+                <label for="program_focus" class="col-sm-2 control-label" style="color:#76bf28;">
                     Program Focus
-                </label>
-                <div class="col-sm-10">
+                </label><div class="col-sm-10">
                     <input class="form-control" type="text" id="program_focus" name="program_focus" value="<?php echo ( isset( $_POST['program_focus'] ) ) ? esc_html( $_POST['program_focus'] ) : esc_html( $this->getProvider()->getProgramFocus() ); ?>">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="audiences" class="col-sm-2 control-label">
+                <label for="audiences" class="col-sm-10 control-label" style="color:#76bf28; text-align: left;">
                     SNAP-eligible Audience Receiving Services
                 </label>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <input class="form-control" type="text" id="audiences" name="audiences" value="<?php echo ( isset( $_POST['audiences'] ) ) ? esc_html( $_POST['audiences'] ) : esc_html( $this->getProvider()->getAudiences() ); ?>">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="sites" class="col-sm-2 control-label">
+                <label for="sites" class="col-sm-10 control-label" style="color:#76bf28; text-align: left;">
                     Sites Receiving Delivery of SNAP-Ed
                 </label>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <input class="form-control" type="text" id="sites" name="sites" value="<?php echo ( isset( $_POST['sites'] ) ) ? esc_html( $_POST['sites'] ) : esc_html( $this->getProvider()->getSites() ); ?>">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="is_profile_private" class="col-sm-2 control-label">
+                <label for="is_profile_private" class="col-sm-2 control-label" style="color:#76bf28;">
                     Privacy
                 </label>
                 <div class="col-sm-4">
@@ -260,9 +251,7 @@ if ( ! defined( 'ABSPATH' ) )
                         </option>
                     </select>
                 </div>
-                <label for="is_in_provider_directory" class="col-sm-2 control-label">
-                    In Directory
-                </label>
+                <label for="is_in_provider_directory" class="col-sm-2 control-label" style="color:#76bf28;">In Directory</label>
                 <div class="col-sm-4">
                     <select name="is_in_provider_directory" id="is_in_provider_directory" class="form-control">
                         <?php
@@ -292,23 +281,21 @@ if ( ! defined( 'ABSPATH' ) )
             ?>
 
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-2 col-sm-10">
                     <div class="checkbox">
                         <label>
-                            <input value="1" type="checkbox" name="receives_notifications"<?php if ( $checked ) { ?> checked<?php } ?>>
-                            Receive occasional website-related notifications
+                            <input value="1" type="checkbox" name="receives_notifications"<?php if ( $checked ) { ?> checked<?php } ?>>Receive occasional website-related notifications
                         </label>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-2 col-sm-10">
                     <p>
-                        <button class="btn btn-default">
+                        <button class="btn btn-default" style="background-color:#147891; color:#fff;text-align: center;">
                             Save My Info
-                        </button>
-                        <a href="<?php echo $this->getDashboardUrl(); ?>" class="btn btn-danger">
+                        </button>   <a href="<?php echo $this->getDashboardUrl(); ?>" class="btn btn-danger">
                             Cancel
                         </a>
                     </p>

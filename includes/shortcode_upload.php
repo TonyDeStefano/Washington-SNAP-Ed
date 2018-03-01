@@ -18,19 +18,19 @@ if ( ! defined( 'ABSPATH' ) )
         </div>
 
     <?php } ?>
+<hr>
+    <h5 id="upload-resource">Upload New Resource</h5>
 
-    <h3 id="upload-resource">Upload New Resource</h3>
-
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" style="border: 1px #76bf28 dotted; width: 90%;">
 
         <?php wp_nonce_field( 'wasnap_upload', 'wasnap_nonce' ); ?>
         <input type="hidden" name="wasnap_action" value="upload">
 
         <div class="form-group">
-            <label for="wasnap-category">
+            <label for="wasnap-category" style="color:#76bf28; padding: 5px;">
                 Category
             </label>
-            <select class="form-control" id="wasnap-category" name="category">
+            <select class="form-control" id="wasnap-category" name="category" style="width: 80%; padding-left: 10px;">
                 <option value="">
                     Choose One ...
                 </option>
@@ -42,14 +42,20 @@ if ( ! defined( 'ABSPATH' ) )
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="wasnap-file">
+        
+ 
+
+		
+		
+
+		
+		<div class="form-group">
+            <label for="wasnap-file" style="color:#76bf28;padding: 5px;">
                 File
-            </label>
-            <input type="file" name="file" id="file" style="line-height: 1 !important;">
+            </label><input type="file" name="file" id="file" style="line-height: 1 !important; " class="btn btn default">
         </div>
 
-        <button class="btn btn-default">
+        <button class="btn btn-default" style="float: left;color:#76bf28;margin-top: 10px; margin-left: 0px;">
             Upload
         </button>
 

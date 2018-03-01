@@ -27,8 +27,8 @@ class ProviderTable extends \WP_List_Table {
     public function get_columns()
     {
         $return = array(
-            'agency' => 'Agency',
             'name' => 'Name',
+			'agency' => 'Agency',
             'region' => 'Region',
             'snap_ed_role' => 'Role',
             'approved' => 'Approved',
@@ -44,8 +44,9 @@ class ProviderTable extends \WP_List_Table {
     public function get_sortable_columns()
     {
         $return =  array(
-            'agency' => array( 'a.agency', TRUE ),
+            
             'name' => array( 'ln.last_name', TRUE ),
+			'agency' => array( 'a.agency', TRUE ),
             'region' => array( 'r.region', TRUE ),
             'snap_ed_role' => array( 'sr.snap_ed_role', TRUE ),
             'approved' => array( 'approved', TRUE )
@@ -64,7 +65,7 @@ class ProviderTable extends \WP_List_Table {
     {
         switch( $column_name ) {
             case 'name':
-                return $item->first_name . ' ' . $item->last_name . '<br><a href="mailto:' . $item->email . '">' . $item->email . '</a><br>' . $item->phone;
+                return $item->last_name . ', ' . $item->first_name . '<br><a href="mailto:' . $item->email . '">' . $item->email . '</a><br>' . $item->phone;
             case 'view':
                 return '<a href="?page=' . $_REQUEST['page'] . '&action=view&id=' . $item->ID . '" class="button-primary">View</a>';
             case 'approved':
@@ -190,7 +191,7 @@ class ProviderTable extends \WP_List_Table {
         {
             $sql .= "
 				ORDER BY
-					a.agency ASC";
+					ln.last_name DESC";
         }
 
         $total_items = $wpdb->query( $sql );

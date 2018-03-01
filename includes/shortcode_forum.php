@@ -30,7 +30,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
             <h3 class="panel-title">
                 Ask a Question or Start a Topic
             </h3>
-        </div>
+        </div >
         <div class="panel-body">
 
             <form method="post" class="form">
@@ -246,8 +246,8 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
     <div class="panel panel-default">
         <div class="panel-heading">
             <p>
-                <a href="<?php echo $this->add_to_querystring( [ 'action' => 'ask' ], FALSE, $forum_url ); ?>" class="btn btn-default btn-sm">
-                    Ask a Question
+                <a href="<?php echo $this->add_to_querystring( [ 'action' => 'ask' ], FALSE, $forum_url ); ?>" class="btn btn-success btn-sm">
+                    Ask a Question or Start a Discussion
                 </a>
             </p>
         </div>
@@ -272,7 +272,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
                     </thead>
                     <?php foreach ( $questions as $question ) { ?>
                         <tr<?php if ( $question->isSticky() ) { ?> class="wasnap-sticky"<?php } ?>>
-                            <td class="title">
+                            <td class="title" style="color:#76bf28;">
                                 <a href="<?php echo $this->add_to_querystring( [ 'action' => 'view', 'id' => $question->getId() ], FALSE, $forum_url ); ?>"><?php echo $question->getTitle(); ?></a><br>
                                 <small>
                                     <?php echo $question->getCreatedAt( 'l, F j, Y' ); ?>

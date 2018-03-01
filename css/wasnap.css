@@ -53,22 +53,27 @@ button.btn {
 
 .wasnap-more {
     display: none;
+
 }
 
 .wasnap-toggle-more {
     cursor: pointer;
+	height: auto;
 }
 
 .panel .panel-heading h3.panel-title {
     margin-bottom: 5px !important;
+	display: none;
 }
 
 .panel .panel-heading p {
     margin-bottom: 5px !important;
+	
 }
 
 .panel .panel-body p {
     margin-bottom: 15px !important;
+
 }
 
 .wasnap-sticky td.title a {
@@ -84,6 +89,19 @@ button.btn {
 }
 
 #wasnap {
-    background: #FFF;
-    padding: 5px;
+    background-color: none;
+ 
+}
+
+.wasnap	{
+	background-color: transparent;
+	
+	
+	
+}
+
+.btn-edit  {
+	background-color: #76bf28;
+	
+	
 }

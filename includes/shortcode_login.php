@@ -34,10 +34,9 @@ $args = array (
 
 <?php } else { ?>
 
-    <h2>Already Registered?</h2>
+    <h2>Provider Login</h2>
     <p>
-        If you have a login and password, enter them here.<br>
-        Otherwise, <a href="<?php echo $this->add_to_querystring( array( 'action' => 'register' ) ); ?>">click here</a> to register.
+		Enter your login info to access Provider section and <strong><em>SNAP-Ed March Forum Registration</em></strong>. You must be registered on wasnap-ed.org to gain access. To register on wasnap-ed.org,<a href="<?php echo $this->add_to_querystring( array( 'action' => 'register' ) ); ?>"> <strong>click here</strong></a>.
     </p>
 
 <?php } ?>

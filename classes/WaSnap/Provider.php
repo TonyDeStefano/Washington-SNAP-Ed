@@ -821,8 +821,8 @@ class Provider {
 
         $args = array(
             'role' => 'provider',
-            'meta_key' => 'agency',
-            'orderby' => 'agency'
+            'meta_key' => 'last_name',
+            'orderby' => 'last_name'
         );
 
         $users = get_users( $args );

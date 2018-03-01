@@ -24,12 +24,11 @@ $providers = \WaSnap\Provider::getDirectoryProviders();
 
     <form class="form-horizontal">
         <div class="form-group">
-            <label for="wasnap-search" class="col-sm-2 control-label">Search</label>
-            <div class="col-sm-8">
-                <input class="form-control" id="wasnap-search">
+            <label for="wasnap-search" class="col-sm-2  control-label" style="color:#76bf28; padding-top:25px; margin-right: -10px;">Search</label><div class="col-sm-8">
+                <input class="form-control" id="wasnap-search" style="float: left;">
             </div>
             <div class="col-sm-2">
-                <a href="#" class="btn btn-default" id="wasnap-search-clear">
+                <a href="#" class="btn btn-danger" id="wasnap-search-clear">
                     Clear
                 </a>
             </div>
@@ -38,29 +37,43 @@ $providers = \WaSnap\Provider::getDirectoryProviders();
 
 <?php } ?>
 
-<?php foreach ( $providers as $provider ) { ?>
+<?php foreach ( $providers as $provider ) { 
 
-    <div class="well wasnap-provider">
+
+
+?>
+
+    <div class="well wasnap-provider" style="background-color: #fff; ">
         <div class="row wasnap-toggle-more" data-state="closed">
             <div class="col-md-11">
-                <strong><?php echo $provider->getAgency(); ?></strong>
-            </div>
-            <div class="col-md-1">
+               
+				<h5 style="color:#147891"><i class="fa fa-address-book-o"></i> <?php echo $provider->getLastName(); ?>, <?php echo $provider->getFirstName(); ?></h5>
+						
+						
+						
+						
+
+			</div>
+            
+			
+			
+			
+			<div class="col-md-1">
                 <i class="fa fa-chevron-down"></i>
             </div>
         </div>
         <div class="wasnap-more">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <p class="wasnap-search">
                         <?php echo $provider->getAddressHtml(); ?><br>
                         <?php echo $provider->getPhone(); ?>
                     </p>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" style="border: 1px solid #76bf28;">
                     <p class="wasnap-search">
                         <?php if ( ! $provider->isProfilePrivate() ) { ?>
-                            <?php echo $provider->getFullName(); ?><br>
+                            <h5 style="color:#147891"><strong><?php echo $provider->getAgency(); ?></strong></h5><br>
                             <a href="mailto:<?php echo $provider->getEmail(); ?>"><?php echo $provider->getEmail(); ?></a>
                         <?php } ?>
                         <?php if ( strlen( $provider->getUrl() ) > 0 ) { ?>
