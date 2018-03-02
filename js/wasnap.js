@@ -73,20 +73,16 @@
         var agency = $('#wasnap-agency').val();
 
         $('.wasnap-provider').each(function(){
+
             $(this).hide();
-        });
-
-        $('.wasnap-search').each(function(){
-
-            var provider = $(this).closest('.wasnap-provider');
             var text = $(this).text().trim().toUpperCase();
 
             if (
                 text.includes(search)
-                && ( region.length === 0 || provider.data('region') === region )
-                && ( agency.length === 0 || provider.data('agency') === agency )
+                && ( region.length === 0 || $(this).data('region') === region )
+                && ( agency.length === 0 || $(this).data('agency') === agency )
             ) {
-                provider.show();
+                $(this).show();
             }
         });
     }
