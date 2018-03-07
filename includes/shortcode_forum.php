@@ -69,9 +69,9 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
         </div>
     </div>
 
-<?php } elseif ( $action == 'view' && isset( $_GET['id'] ) ) { ?>
+<?php } elseif ( $action == 'view' && isset( $_GET['qid'] ) ) { ?>
 
-    <?php $question = new \WaSnap\Question( $_GET['id'], TRUE ); ?>
+    <?php $question = new \WaSnap\Question( $_GET['qid'], TRUE ); ?>
 
     <?php if ( $question->getId() === NULL || $question->getParentId() !== NULL ) { ?>
 
@@ -126,20 +126,19 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
                     <?php echo $question->getCreatedAt( 'l, F j, Y' ); ?>
                 </small>
             </div>
-            <?php if ( strlen( $question->getContent() ) > 0 ) { ?>
-                <div class="panel-body">
-                    <?php echo $this->formatLinks( $question->getContent() ); ?>
-                    <?php if ( $this->getProvider()->isAdmin() ) { ?>
-                        <div class="text-right" style="margin: 5px 0 0;">
-                            <a
-                                href="<?php echo $this->add_to_querystring( array( 'action' => 'view', 'id' => $question->getId(), 'delete' => $question->getId() ), TRUE, $forum_url ); ?>"
-                                class="btn btn-danger btn-xs wasnap-delete-post"
-                                data-id="<?php echo $question->getId(); ?>"
-                            ><i class="fa fa-times"></i></a>
-                        </div>
-                    <?php } ?>
-                </div>
-            <?php } ?>
+            <div class="panel-body">
+                <strong><?php echo $question->getTitle(); ?></strong><br>
+                <?php echo $this->formatLinks( $question->getContent() ); ?>
+                <?php if ( $this->getProvider()->isAdmin() ) { ?>
+                    <div class="text-right" style="margin: 5px 0 0;">
+                        <a
+                            href="<?php echo $this->add_to_querystring( array( 'action' => 'view', 'qid' => $question->getId(), 'delete' => $question->getId() ), TRUE, $forum_url ); ?>"
+                            class="btn btn-danger btn-xs wasnap-delete-post"
+                            data-id="<?php echo $question->getId(); ?>"
+                        ><i class="fa fa-times"></i></a>
+                    </div>
+                <?php } ?>
+            </div>
         </div>
 
         <?php if ( count ( $question->getAnswers() ) > 0 ) { ?>
@@ -181,7 +180,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
                             <?php if ( $this->getProvider()->isAdmin() ) { ?>
                                 <div class="text-right" style="margin: 5px 0 0;">
                                     <a
-                                        href="<?php echo $this->add_to_querystring( array( 'action' => 'view', 'id' => $question->getId(), 'delete' => $answer->getId() ), TRUE, $forum_url ); ?>"
+                                        href="<?php echo $this->add_to_querystring( array( 'action' => 'view', 'qid' => $question->getId(), 'delete' => $answer->getId() ), TRUE, $forum_url ); ?>"
                                         class="btn btn-danger btn-xs wasnap-delete-post"
                                         data-id="<?php echo $question->getId(); ?>"
                                     ><i class="fa fa-times"></i></a>
@@ -273,7 +272,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
                     <?php foreach ( $questions as $question ) { ?>
                         <tr<?php if ( $question->isSticky() ) { ?> class="wasnap-sticky"<?php } ?>>
                             <td class="title" style="color:#76bf28;">
-                                <a href="<?php echo $this->add_to_querystring( [ 'action' => 'view', 'id' => $question->getId() ], FALSE, $forum_url ); ?>"><?php echo $question->getTitle(); ?></a><br>
+                                <a href="<?php echo $this->add_to_querystring( [ 'action' => 'view', 'qid' => $question->getId() ], FALSE, $forum_url ); ?>"><?php echo $question->getTitle(); ?></a><br>
                                 <small>
                                     <?php echo $question->getCreatedAt( 'l, F j, Y' ); ?>
                                 </small>

@@ -362,7 +362,7 @@ class Controller {
 
                         if ( $question->getId() === NULL )
                         {
-                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'view', 'id' => $question->getId() ), TRUE, $this->getForumPageUrl() ) );
+                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'view', 'qid' => $question->getId() ), TRUE, $this->getForumPageUrl() ) );
                             exit;
                         }
 
@@ -379,7 +379,18 @@ class Controller {
                                 ->setProviderId( $this->getProvider()->getId() )
                                 ->create();
 
-                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'view', 'id' => $answer->getParentId() ), TRUE, $this->getForumPageUrl() ) );
+                            $provider = new Provider( $question->getProviderId() );
+
+                            if ( $provider->getId() !== NULL && $provider->getEmail() !== NULL )
+                            {
+                                $message = '
+                                    <p>Someone has responded to your question <strong>"' . $question->getTitle() . '"</strong> on The Wasghington State SNAP Education website.</p>
+                                    <p><a href="' . get_site_url() . '/' . $this->add_to_querystring( array( 'action' => 'view', 'qid' => $answer->getParentId() ), TRUE, $this->getForumPageUrl() ) . '">Click here</a> to view the answer.</p>';
+
+                                Email::sendEmail( $provider->getEmail(), 'New Answer to Your Question', $message, TRUE );
+                            }
+
+                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'view', 'qid' => $answer->getParentId() ), TRUE, $this->getForumPageUrl() ) );
                             exit;
                         }
 
@@ -404,7 +415,7 @@ class Controller {
                                 ->setIsSticky( ( isset( $_POST['is_sticky'] ) ) )
                                 ->create();
 
-                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'view', 'id' => $question->getId() ), TRUE, $this->getForumPageUrl() ) );
+                            header( 'Location:' . $this->add_to_querystring( array( 'action' => 'view', 'qid' => $question->getId() ), TRUE, $this->getForumPageUrl() ) );
                             exit;
                         }
 
@@ -692,7 +703,17 @@ class Controller {
             $querystring[] = $arg;
         }
 
-		return $url . ( ( count( $querystring ) > 0 ) ? '?' . implode( '&', $querystring ) : '' );
+        /* remove duplicates */
+        $qs = [];
+		foreach ( $querystring as $string )
+        {
+            if ( ! in_array( $string, $qs ) )
+            {
+                $qs[] = $string;
+            }
+        }
+
+		return $url . ( ( count( $qs ) > 0 ) ? '?' . implode( '&', $qs ) : '' );
 	}
 	
 	public function short_code( $attributes, $content = NULL )
@@ -1258,7 +1279,7 @@ class Controller {
             /* forum */
             foreach ( $rows as $index => $row )
             {
-                if ( strpos( $row->post_content, '[wasnap page="forum"]' ) !== FALSE )
+                if ( strpos( $row->post_content, '[wasnap page="dashboard"]' ) !== FALSE )
                 {
                     $this->shortcode_pages[ $row->ID ] = new Page( $row->ID, $row->post_title, $row->post_name, $row->guid, 'forum' );
                     unset( $rows[ $index ] );
