@@ -381,7 +381,7 @@ class Controller {
 
                             $provider = new Provider( $question->getProviderId() );
 
-                            if ( $provider->getId() !== NULL && $provider->getEmail() !== NULL )
+                            if ( $provider->getId() !== NULL && $provider->getEmail() !== NULL && $provider->receivesNotifications() )
                             {
                                 $message = '
                                     <p>Someone has responded to your question <strong>"' . $question->getTitle() . '"</strong> on The Wasghington State SNAP Education website.</p>
