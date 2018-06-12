@@ -128,7 +128,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
             </div>
             <div class="panel-body">
                 <strong><?php echo $question->getTitle(); ?></strong><br>
-                <?php echo $this->formatLinks( $question->getContent() ); ?>
+                <?php echo stripslashes( $this->formatLinks( $question->getContent() ) ); ?>
                 <?php if ( $this->getProvider()->isAdmin() ) { ?>
                     <div class="text-right" style="margin: 5px 0 0;">
                         <a
@@ -154,7 +154,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
                             </p>
                         </td>
                         <td style="width:80%">
-                            <p style="margin-bottom:5px;"><?php echo $this->formatLinks( $answer->getContent() ); ?></p>
+                            <p style="margin-bottom:5px;"><?php echo stripslashes( $this->formatLinks( $answer->getContent() ) ); ?></p>
                             <em style="font-size:60%;">
                                 <?php
 
@@ -175,7 +175,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
 
                                 ?>
                                 on
-                                <?php echo $question->getCreatedAt( 'l, F j, Y' ); ?>
+                                <?php echo $answer->getCreatedAt( 'l, F j, Y' ); ?>
                             </em>
                             <?php if ( $this->getProvider()->isAdmin() ) { ?>
                                 <div class="text-right" style="margin: 5px 0 0;">
@@ -302,7 +302,7 @@ if ( isset( $_GET['delete'] ) && $this->getProvider()->isAdmin() )
                                 <?php if ( $question->getChildCount() > 0 ) { ?>
                                     <br>
                                     <small>
-                                        <?php echo $question->getCreatedAt( 'n/j/Y' ); ?>
+                                        <?php echo $question->getUpdatedAt( 'n/j/Y' ); ?>
                                     </small>
                                 <?php } ?>
                             </td>
